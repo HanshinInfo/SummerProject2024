@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/fragment_group"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_map"
+            android:title="학교지도"
+            android:checkable="true"
+            android:checked="true"/>
+
+        <item
+            android:id="@+id/menu_schedule"
+            android:title="학사일정"
+            android:checkable="true"
+            android:checked="false"/>
+
+        <item
+            android:id="@+id/menu_university_number"
+            android:title="전화번호 검색"
+            android:checkable="true"
+            android:checked="false"/>
+
+        <item
+            android:id="@+id/menu_town_info"
+            android:title="상권"
+            android:checkable="true"
+            android:checked="false"/>
+    </group>
+
+    <group
+        android:id="@+id/link_group">
+        <item
+            android:id="@+id/menu_homepage"
+            android:title="학교 홈페이지"
+            android:checkable="false"
+            android:checked="false"/>
+
+        <item
+            android:id="@+id/menu_lms"
+            android:title="lms"
+            android:checkable="false"
+            android:checked="false"/>
+
+        <item
+            android:id="@+id/menu_hsctis"
+            android:title="한신종합정보"
+            android:checkable="false"
+            android:checked="false"/>
+
+        <item
+            android:id="@+id/menu_attend"
+            android:title="전자출결"
+            android:checkable="false"
+            android:checked="false"/>
+
+        <item
+            android:id="@+id/menu_sugang"
+            android:title="수강신청"
+            android:checkable="false"
+            android:checked="false"/>
+    </group>
+</menu>
