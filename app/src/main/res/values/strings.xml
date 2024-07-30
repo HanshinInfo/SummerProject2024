@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">SummerProject2024</string>
+
+    <string name="map_page">학교 지도</string>
+    <string name="num_page">전화 번호</string>
+    <string name="town_page">주변 상권</string>
+    <string name="schedule_page">학사 일정</string>
 </resources>

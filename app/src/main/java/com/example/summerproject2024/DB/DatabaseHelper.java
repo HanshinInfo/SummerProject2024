@@ -69,6 +69,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursorToArrayList(cursor);
     }
 
+    public ArrayList<String>[] selectBusinessZone(){
+        String sql = "SELECT * FROM BusinessZone;";
+        return selectTable(sql);
+    }
+
     public ArrayList<String>[] selectBusinessZoneUsingName(String name){
         String sql = "SELECT * FROM BusinessZone WHERE name = '"+name+"';";
         return selectTable(sql);
