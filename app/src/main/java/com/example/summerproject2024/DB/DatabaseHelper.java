@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static String dbName = "Android.db";
-    public static int version = 18;
+    public static int version = 25;
 
     public DatabaseHelper(@Nullable Context context) {
 
@@ -22,8 +22,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.d("DatabaseHelper", "onCreate 호출");
+        db.execSQL(createTableBusinessZone());
+        db.execSQL(createTableBuilding());
+        db.execSQL(createTableAmenity());
+        db.execSQL(createTableCoordinate());
         db.execSQL(createTableCallNumbers());
         db.execSQL(createTableProfessorCallNumbers());
+        db.execSQL(insertBusinessZone());
+        db.execSQL(insertBuilding());
+        db.execSQL(insertAmenity());
+        //db.execSQL(insertCoordinate());
         db.execSQL(insertCallNumbers());
         db.execSQL(insertProfessor());
     }
@@ -61,21 +69,101 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursorToArrayList(cursor);
     }
 
-    public ArrayList<String>[] selectTest(String name) {
-        String sql = "SELECT name, CallNumber  FROM CallNumbers WHERE name = '" + name + "';";
+    public ArrayList<String>[] selectBusinessZoneUsingName(String name){
+        String sql = "SELECT * FROM BusinessZone WHERE name = '"+name+"';";
         return selectTable(sql);
     }
-    public ArrayList<String>[] selectTest2(String name) {
-        String sql = "SELECT name, CallNumber  FROM ProfessorCallNumbers WHERE name = '" + name + "';";
+
+    public ArrayList<String>[] selectBusinessZoneUsingCategory(String category){
+        String sql = "SELECT * FROM BusinessZone WHERE category = '"+category+"';";
+        return selectTable(sql);
+    }
+
+    public ArrayList<String>[] selectBuildingUsingCode(String code){
+        String sql = "SELECT * FROM Building WHERE building_code = '"+code+"';";
+        return selectTable(sql);
+    }
+
+    public ArrayList<String>[] selectBuildingUsingName(String name){
+        String sql = "SELECT * FROM Building WHERE building_name = '"+name+"';";
+        return selectTable(sql);
+    }
+
+    public ArrayList<String>[] selectAmenityUsingCategory(String category){
+        String sql = "SELECT * FROM Amenity WHERE category = '"+category+"';";
+        return selectTable(sql);
+    }
+
+    public ArrayList<String>[] selectCoordinate(String code){
+        String sql = "SELECT b.building_name, c.x1, c.y1, c.x2, c.y2 FROM Coordinate AS c, Building AS B WHERE c.building_code=b.building_code and c.building_code = '"+code+"';";
+        return selectTable(sql);
+    }
+
+    public ArrayList<String>[] selectProfessorUsingName(String name){
+        String sql = "SELECT affiliation, name, CallNumber, officeNumber FROM ProfessorCallNumbers WHERE name = '"+name+"';";
+        return selectTable(sql);
+    }
+
+    public ArrayList<String>[] selectProfessorUsingaffiliation(String affiliation){
+        String sql = "SELECT affiliation, name, CallNumber, officeNumber FROM ProfessorCallNumbers WHERE affiliation = '"+affiliation+"';";;
+        return selectTable(sql);
+    }
+
+    public ArrayList<String>[] selectCallNumbers(String affiliation){
+        String sql = "SELECT affiliation, sub_affiliation, name, CallNumber, office_number FROM ProfessorCallNumbers WHERE affiliation = '"+affiliation+"';";;
         return selectTable(sql);
     }
 
     public String deleteTable(){
-        String sql = "DROP TABLE IF EXISTS CallNumbers;\n" +
-                "DROP TABLE IF EXISTS ProfessorCallNumbers;";
+        String sql = "DROP TABLE IF EXISTS BusinessZone;\n" +
+                "DROP TABLE IF EXISTS CallNumbers;\n" +
+                "DROP TABLE IF EXISTS ProfessorCallNumbers;\n" +
+                "DROP TABLE IF EXISTS Amenity;\n" +
+                "DROP TABLE IF EXISTS Coordinate;\n" +
+                "DROP TABLE IF EXISTS Building;";
+        return sql;
+    }
+    public String createTableBusinessZone(){
+        String sql = "CREATE TABLE IF NOT EXISTS BusinessZone (\n" +
+                "    id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                "    name TEXT,\n" +
+                "    location TEXT default '정보없음',\n" +
+                "    category TEXT,\n" +
+                "    picture TEXT default '정보없음' ,\n" +
+                "    link TEXT default '정보없음'\n" +
+                ");";
         return sql;
     }
 
+    public String createTableBuilding(){
+        String sql = "CREATE TABLE IF NOT EXISTS Building (\n" +
+                "    building_code TEXT PRIMARY KEY,\n" +
+                "    building_name TEXT,\n" +
+                "    picture TEXT default '정보없음'\n" +
+                ");";
+        return sql;
+    }
+    public String createTableAmenity(){
+        String sql = "CREATE TABLE IF NOT EXISTS Amenity(\n" +
+                "\tid INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                "\tcategory TEXT,\n" +
+                "\tbuilding_code TEXT,\n" +
+                "\tFOREIGN KEY(building_code) REFERENCES Building(building_code)\n" +
+                ");";
+        return sql;
+    }
+    public String createTableCoordinate(){
+        String sql = "CREATE TABLE IF NOT EXISTS Coordinate (\n" +
+                "    building_code TEXT,\n" +
+                "    x1 TEXT,\n" +
+                "    y1 TEXT,\n" +
+                "    x2 TEXT,\n" +
+                "    y2 TEXT,\n" +
+                "    PRIMARY KEY(building_code),\n" +
+                "    FOREIGN KEY(building_code) REFERENCES Building(building_code)\n" +
+                ");";
+        return sql;
+    }
     public String createTableCallNumbers() {
         String sql ="CREATE TABLE IF NOT EXISTS CallNumbers (\n" +
                 "    id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
@@ -99,16 +187,91 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 ");\n";
         return sql;
     }
-    public String insertTest(){
-        String sql = "INSERT INTO CallNumbers (affiliation, sub_affiliation, name, CallNumber, office_number) VALUES\n" +
-                "('한신대학교','총장','강성영','031-379-0001','1201'),\n" +
-                "('교목실','교목실장','나현기','031-379-0011','4102');\n";
+
+    public String insertBusinessZone(){
+        String sql = "INSERT INTO BusinessZone (name, location, category, picture, link)\n" +
+                "VALUES\n" +
+                "    ('행복한 콩박사', '경기도 오산시 양산로398번길 8-11', '음식점', '', ''),\n" +
+                "    ('한신식당', '경기도 오산시 양산동 294-26', '음식점', '', ''),\n" +
+                "    ('해우리', '경기도 오산시 양산동 한신대길 135 1층', '음식점', '', ''),\n" +
+                "    ('태리로제떡볶이', '경기도 오산시 양산동 399번지 1층', '음식점', '', ''),\n" +
+                "    ('우리반점', '경기도 오산시 양산동 420번지', '음식점', '', ''),\n" +
+                "    ('금덕이네', '경기도 오산시 양산동 434번지 1층', '음식점', '', ''),\n" +
+                "    ('이삭토스트', '경기도 오산시 양산동', '샌드위치', '', ''),\n" +
+                "    ('복고다방한신대점', '오산시', '카페', '', ''),\n" +
+                "    ('미소김밥', '경기도 오산시 양산동 386번지 1층', '김밥전문 음식점', '', ''),\n" +
+                "    ('맘스터치한신대점', '경기도 오산시 양산동 438-1', '패스트푸드 음식점', '', ''),\n" +
+                "    ('유림짱당구클럽', '경기도 오산시 양산동 305-7번지', '당구장', '', ''),\n" +
+                "    ('CU 편의점', '오산시', '편의점', '', ''),\n" +
+                "    ('요거프레스', '경기도 오산시 양산동 382-3', '카페', '', ''),\n" +
+                "    ('봉구스밥버거 한신대점', '경기도 오산시 세마동 한신대길 126', '음식점', '', ''),\n" +
+                "    ('나누리한신대본점', '경기도 오산시 세마동 한신대길 126', '술집', '', ''),\n" +
+                "    ('코리엔탈깻잎두마리치킨', '경기도 오산시 양산동 382-8 1층', '음식점', '', ''),\n" +
+                "    ('GS25 한신대점', '경기도 오산시 양산동 382-4', '편의점', '', ''),\n" +
+                "    ('진현가든', '경기도 오산시 양산동 444-1', '음식점', '', ''),\n" +
+                "    ('해뜨는집', '경기도 오산시 한신대길 118', '한식당', '', ''),\n" +
+                "    ('몽상', '경기도 오산시 양산동 378-4번지 순복음찬양교회 1층', '음식점', '', ''),\n" +
+                "    ('화락', '경기도 오산시 양산로 347', '일식 음식점', '', ''),\n" +
+                "    ('카페 리메인', '경기도 오산시 양산로 351', '카페', '', ''),\n" +
+                "    ('내가찜한닭', '경기도 오산시 양산동 379-1', '음식점', '', ''),\n" +
+                "    ('양산골 주막', '경기도 오산시 양산동 한신대길 113', '술집', '', ''),\n" +
+                "    ('듬뿍만두샤브', '경기도 오산시 세마동 양산로 374', '음식점', '', ''),\n" +
+                "    ('현대E마트', '경기도 오산시 양산동 379-5', '식료품점', '', ''),\n" +
+                "    ('드렁큰할매', '경기도 오산시 양산동 382-8 1층', '술집', '', '');\n";
         return sql;
     }
-    public String insertTest2(){
-        String sql = "INSERT INTO ProfessorCallNumbers (affiliation, name, CallNumber, officeNumber) VALUES\n" +
-                "('신학대학','이영미','031-379-0383','2102'),\n" +
-                "('신학대학','방진현','031-379-0460','8105');\n";
+
+    public String insertBuilding(){
+        String sql = "INSERT INTO Building (building_code, building_name, picture)\n" +
+                "VALUES\n" +
+                "('1', '장공관',' '),\n" +
+                "('2', '필헌관',' '),\n" +
+                "('3', '만우관',' '),\n" +
+                "('4', '교회당',' '),\n" +
+                "('5', '임마누엘관',' '),\n" +
+                "('6', '경삼관(도서관)',' '),\n" +
+                "('7', '송암관',' '),\n" +
+                "('8', '소통관',' '),\n" +
+                "('9', '실습동',' '),\n" +
+                "('10', '한울관(체육관)',' '),\n" +
+                "('11', '생활관',' '),\n" +
+                "('17', '해오름관',' '),\n" +
+                "('18', '장준하통일관',' '),\n" +
+                "('20', '늦봄관',' ');";
+        return sql;
+    }
+
+    public String insertAmenity(){
+        String sql = "INSERT INTO Amenity (category, building_code)\n" +
+                "VALUES\n" +
+                "('식당' , '18'),\n" +
+                "('편의점' , '18'),\n" +
+                "('카페' , '18'),\n" +
+                "('ATM' , '18'),\n" +
+                "('복사기' , '18'),\n" +
+                "('복사기' , '7'),\n" +
+                "('카페' , '14' ),\n" +
+                "('복사기', '2'),\n" +
+                "('ATM', '2'),\n" +
+                "('복사기', '20'),\n" +
+                "('카페', '3'),\n" +
+                "('복사기', '3'),\n" +
+                "('식당', '5'),\n" +
+                "('편의점', '5'),\n" +
+                "('서점', '5'),\n" +
+                "('복사기', '6'),\n" +
+                "('카페', '6'),\n" +
+                "('ATM', '6'),\n" +
+                "('우체국', '17'),\n" +
+                "('ATM', '17'),\n" +
+                "('여학생휴게실', '17'),\n" +
+                "('복사기', '11'),\n" +
+                "('편의점', '11');";
+        return sql;
+    }
+
+    public String insertCoordinate(){
+        String sql = "";
         return sql;
     }
     public String insertCallNumbers() {
