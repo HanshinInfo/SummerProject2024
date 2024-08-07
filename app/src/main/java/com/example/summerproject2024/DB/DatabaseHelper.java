@@ -113,8 +113,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String sql = "SELECT affiliation, name, CallNumber, officeNumber FROM ProfessorCallNumbers WHERE affiliation = '"+affiliation+"';";;
         return selectTable(sql);
     }
+    public ArrayList<String>[] selectCallNumbersAll(){
+        String sql = "SELECT affiliation, sub_affiliation, name, CallNumber, office_number FROM ProfessorCallNumbers;";;
+        return selectTable(sql);
+    }
+    public ArrayList<String>[] selectCallNumbersUsingName(String name){
+        String sql = "SELECT affiliation, sub_affiliation, name, CallNumber, office_number FROM ProfessorCallNumbers WHERE name = '"+name+"';";;
+        return selectTable(sql);
+    }
 
-    public ArrayList<String>[] selectCallNumbers(String affiliation){
+    public ArrayList<String>[] selectCallNumbersUsingAffiliation(String affiliation){
         String sql = "SELECT affiliation, sub_affiliation, name, CallNumber, office_number FROM ProfessorCallNumbers WHERE affiliation = '"+affiliation+"';";;
         return selectTable(sql);
     }
