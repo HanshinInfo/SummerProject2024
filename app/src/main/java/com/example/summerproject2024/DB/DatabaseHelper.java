@@ -120,11 +120,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return categoryList;
     }
 
-    public ArrayList<String>[] selectCallNumbersAll(){
-        String sql = "SELECT affiliation, sub_affiliation, name, CallNumber, office_number FROM ProfessorCallNumbers;";;
-        return selectTable(sql);
-    }
-
     public ArrayList<String>[] selectBusinessZone(){
         String sql = "SELECT * FROM BusinessZone;";
         return selectTable(sql);
