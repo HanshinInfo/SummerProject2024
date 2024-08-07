@@ -31,7 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(insertBusinessZone());
         db.execSQL(insertBuilding());
         db.execSQL(insertAmenity());
-        //db.execSQL(insertCoordinate());
+        db.execSQL(insertCoordinate());
         db.execSQL(insertCallNumbers());
         db.execSQL(insertProfessor());
     }
@@ -284,7 +284,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public String insertCoordinate(){
-        String sql = "";
+        String sql = "INSERT INFO Coordinate (building_code, x1, y1, x2, y2) VALUES\n" +
+                "('18', '179', '495', '277', '601)',  \n"  +
+                "('9', '484', '750', '584', '848)',  \n"  +
+                "('7', '696', '803', '796', '903)',  \n"  +
+                "('14', '892', '556', '992', '652)',  \n"  +
+                "('2', '982', '670', '1080', '766)',  \n"  +
+                "('8', '995', '829', '1096', '932)',  \n"  +
+                "('6', '1165', '925', '1268', '1028)',  \n"  +
+                "('1', '1337', '739', '1443', '842)',  \n"  +
+                "('20', '1289', '294', '1385', '395)',  \n"  +
+                "('3', '1782', '474', '1880', '577)',  \n"  +
+                "('4', '2209', '694', '2307', '795)',  \n"  +
+                "('5', '1793', '991', '1891', '1090)',  \n"  +
+                "('17', '1515', '1298', '1618', '1396)',  \n"  +
+                "('10', '2257', '1083', '2357', '1181)',  \n"  +
+                "('11', '2726', '1274', '2829', '1375)',  \n"  +
+                "('bus', '183', '1032', '518', '1163);";
         return sql;
     }
     public String insertCallNumbers() {
