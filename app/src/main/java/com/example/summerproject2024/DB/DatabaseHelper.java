@@ -1,5 +1,6 @@
 package com.example.summerproject2024.DB;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static String dbName = "Android.db";
-    public static int version = 25;
+    public static int version = 27;
 
     public DatabaseHelper(@Nullable Context context) {
 
@@ -22,12 +23,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.d("DatabaseHelper", "onCreate 호출");
+
+        //CreateTable
         db.execSQL(createTableBusinessZone());
         db.execSQL(createTableBuilding());
         db.execSQL(createTableAmenity());
         db.execSQL(createTableCoordinate());
         db.execSQL(createTableCallNumbers());
         db.execSQL(createTableProfessorCallNumbers());
+
+        //InsertTable
         db.execSQL(insertBusinessZone());
         db.execSQL(insertBuilding());
         db.execSQL(insertAmenity());
@@ -62,11 +67,63 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return answer;
     }
+
     public ArrayList<String>[] selectTable(String sql) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(sql, null);
 
         return cursorToArrayList(cursor);
+    }
+
+
+    //Select Building Code using coordinate
+    public String selectBuildingCode(int x, int y) {
+
+        String sql = "SELECT building_code FROM Coordinate " +
+                "WHERE x1 <= " + x + " and x2 >= " + x + " and y1 <= " + y + " and y2 >= " + y +";";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+
+        if(cursor.getCount() != 0){
+            cursor.moveToFirst();
+            return cursor.getString(0);
+        }
+        else{
+            return "None";
+        }
+    }
+
+    //Select Building Name using buildingCode
+    public String selectBuildingInfo(String building_code){
+        String sql = "SELECT building_name FROM Building " +
+                "WHERE building_code = '" + building_code + "';";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+        cursor.moveToFirst();
+
+        return cursor.getString(0);
+    }
+
+    public ArrayList<String> selectCategoryUsingAmenity(String building_code){
+        ArrayList<String> categoryList = new ArrayList<String>();
+
+        String sql = "SELECT category FROM Amenity WHERE building_code = '"+ building_code + "';";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+
+        while(cursor.moveToNext()){
+            categoryList.add(cursor.getString(0));
+        }
+
+        return categoryList;
+    }
+
+    public ArrayList<String>[] selectCallNumbersAll(){
+        String sql = "SELECT affiliation, sub_affiliation, name, CallNumber, office_number FROM ProfessorCallNumbers;";;
+        return selectTable(sql);
     }
 
     public ArrayList<String>[] selectBusinessZone(){
@@ -84,23 +141,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return selectTable(sql);
     }
 
-    public ArrayList<String>[] selectBuildingUsingCode(String code){
-        String sql = "SELECT * FROM Building WHERE building_code = '"+code+"';";
-        return selectTable(sql);
-    }
-
-    public ArrayList<String>[] selectBuildingUsingName(String name){
-        String sql = "SELECT * FROM Building WHERE building_name = '"+name+"';";
-        return selectTable(sql);
-    }
-
     public ArrayList<String>[] selectAmenityUsingCategory(String category){
         String sql = "SELECT * FROM Amenity WHERE category = '"+category+"';";
-        return selectTable(sql);
-    }
-
-    public ArrayList<String>[] selectCoordinate(String code){
-        String sql = "SELECT b.building_name, c.x1, c.y1, c.x2, c.y2 FROM Coordinate AS c, Building AS B WHERE c.building_code=b.building_code and c.building_code = '"+code+"';";
         return selectTable(sql);
     }
 
@@ -143,11 +185,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public String createTableBuilding(){
         String sql = "CREATE TABLE IF NOT EXISTS Building (\n" +
                 "    building_code TEXT PRIMARY KEY,\n" +
-                "    building_name TEXT,\n" +
-                "    picture TEXT default '정보없음'\n" +
+                "    building_name TEXT\n" +
                 ");";
         return sql;
     }
+
     public String createTableAmenity(){
         String sql = "CREATE TABLE IF NOT EXISTS Amenity(\n" +
                 "\tid INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
@@ -160,10 +202,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public String createTableCoordinate(){
         String sql = "CREATE TABLE IF NOT EXISTS Coordinate (\n" +
                 "    building_code TEXT,\n" +
-                "    x1 TEXT,\n" +
-                "    y1 TEXT,\n" +
-                "    x2 TEXT,\n" +
-                "    y2 TEXT,\n" +
+                "    x1 INTEGER,\n" +
+                "    y1 INTEGER,\n" +
+                "    x2 INTEGER,\n" +
+                "    y2 INTEGER,\n" +
                 "    PRIMARY KEY(building_code),\n" +
                 "    FOREIGN KEY(building_code) REFERENCES Building(building_code)\n" +
                 ");";
@@ -227,72 +269,76 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public String insertBuilding(){
-        String sql = "INSERT INTO Building (building_code, building_name, picture)\n" +
+        String sql = "INSERT INTO Building (building_code, building_name)\n" +
                 "VALUES\n" +
-                "('1', '장공관',' '),\n" +
-                "('2', '필헌관',' '),\n" +
-                "('3', '만우관',' '),\n" +
-                "('4', '교회당',' '),\n" +
-                "('5', '임마누엘관',' '),\n" +
-                "('6', '경삼관(도서관)',' '),\n" +
-                "('7', '송암관',' '),\n" +
-                "('8', '소통관',' '),\n" +
-                "('9', '실습동',' '),\n" +
-                "('10', '한울관(체육관)',' '),\n" +
-                "('11', '생활관',' '),\n" +
-                "('17', '해오름관',' '),\n" +
-                "('18', '장준하통일관',' '),\n" +
-                "('20', '늦봄관',' ');";
+                "('1', '장공관(본관)'),\n" +
+                "('2', '필헌관(대학원)'),\n" +
+                "('3', '만우관'),\n" +
+                "('4', '샬롬채플'),\n" +
+                "('5', '임마누엘관(학생회관)'),\n" +
+                "('6', '경삼관(도서관)'),\n" +
+                "('7', '송암관'),\n" +
+                "('8', '소통관(어학관)'),\n" +
+                "('9', '학과실습동'),\n" +
+                "('10', '한울관(체육관)'),\n" +
+                "('11', '성빈학사(생활관)'),\n" +
+                "('14', '새롬터'),\n" +
+                "('17', '해오름관'),\n" +
+                "('18', '장준하통일관'),\n" +
+                "('20', '늦봄관'), \n" +
+                "('0', '버스 정류장');";
         return sql;
     }
 
     public String insertAmenity(){
         String sql = "INSERT INTO Amenity (category, building_code)\n" +
                 "VALUES\n" +
-                "('식당' , '18'),\n" +
-                "('편의점' , '18'),\n" +
-                "('카페' , '18'),\n" +
-                "('ATM' , '18'),\n" +
-                "('복사기' , '18'),\n" +
-                "('복사기' , '7'),\n" +
-                "('카페' , '14' ),\n" +
-                "('복사기', '2'),\n" +
+//                "('서점', '5'),\n" +
+                "('남학생휴게실', '3'),\n" +
+                "('여학생휴게실', '17'),\n" +
                 "('ATM', '2'),\n" +
+                "('ATM', '6'),\n" +
+                "('ATM', '17'),\n" +
+                "('ATM' , '18'),\n" +
+                "('복사기', '2'),\n" +
+                "('복사기', '3'),\n" +
+                "('복사기', '6'),\n" +
+                "('복사기' , '7'),\n" +
+                "('복사기', '11'),\n" +
+                "('복사기' , '18'),\n" +
                 "('복사기', '20'),\n" +
                 "('카페', '3'),\n" +
-                "('복사기', '3'),\n" +
-                "('식당', '5'),\n" +
-                "('편의점', '5'),\n" +
-                "('서점', '5'),\n" +
-                "('복사기', '6'),\n" +
                 "('카페', '6'),\n" +
-                "('ATM', '6'),\n" +
+                "('카페' , '14' ),\n" +
+                "('카페' , '18'),\n" +
                 "('우체국', '17'),\n" +
-                "('ATM', '17'),\n" +
-                "('여학생휴게실', '17'),\n" +
-                "('복사기', '11'),\n" +
-                "('편의점', '11');";
+                "('식당', '5'),\n" +
+                "('식당' , '18'),\n" +
+                "('편의점', '5'),\n" +
+                "('편의점' , '11'),\n" +
+                "('편의점', '18');";
         return sql;
     }
 
     public String insertCoordinate(){
-        String sql = "INSERT INFO Coordinate (building_code, x1, y1, x2, y2) VALUES\n" +
-                "('18', '179', '495', '277', '601)',  \n"  +
-                "('9', '484', '750', '584', '848)',  \n"  +
-                "('7', '696', '803', '796', '903)',  \n"  +
-                "('14', '892', '556', '992', '652)',  \n"  +
-                "('2', '982', '670', '1080', '766)',  \n"  +
-                "('8', '995', '829', '1096', '932)',  \n"  +
-                "('6', '1165', '925', '1268', '1028)',  \n"  +
-                "('1', '1337', '739', '1443', '842)',  \n"  +
-                "('20', '1289', '294', '1385', '395)',  \n"  +
-                "('3', '1782', '474', '1880', '577)',  \n"  +
-                "('4', '2209', '694', '2307', '795)',  \n"  +
-                "('5', '1793', '991', '1891', '1090)',  \n"  +
-                "('17', '1515', '1298', '1618', '1396)',  \n"  +
-                "('10', '2257', '1083', '2357', '1181)',  \n"  +
-                "('11', '2726', '1274', '2829', '1375)',  \n"  +
-                "('bus', '183', '1032', '518', '1163);";
+        String sql = "INSERT INTO Coordinate (building_code, x1, y1, x2, y2) VALUES\n" +
+                "('1', 1295,554,1379,641), \n" +
+                "('2', 1088,473,1172,560), \n" +
+                "('3', 1685,389,1772,473), \n" +
+                "('4', 2051,509,2135,590), \n" +
+                "('5', 1568,788,1652,873), \n" +
+                "('6', 1178,758,1259,840), \n" +
+                "('7', 797,635,882,722), \n" +
+                "('8', 1013,659,1100,743), \n" +
+                "('9', 482,539,570,621), \n" +
+                "('10', 1880,906,1961,990), \n" +
+                "('11', 2445,1170,2529,1257), \n" +
+                "('14', 1022,315,1106,398), \n" +
+                "('17', 1526,939,1613,1023), \n" +
+                "('18', 521,362,610,449), \n" +
+                "('20', 1166,247,1253,328);";
+//                "('20', '1289', '294', '1385', '395')',  \n"  +
+//                "('bus', '183', '1032', '518', '1163');";
         return sql;
     }
     public String insertCallNumbers() {
@@ -1037,4 +1083,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "('연계전공','안희연','031-379-0607','18421-1');";
         return sql;
     }
+
 }
