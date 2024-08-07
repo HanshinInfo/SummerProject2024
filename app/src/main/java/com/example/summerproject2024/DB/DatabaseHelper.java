@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static String dbName = "Android.db";
-    public static int version = 25;
+    public static int version = 26;
 
     public DatabaseHelper(@Nullable Context context) {
 
