@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static String dbName = "Android.db";
-    public static int version = 27;
+    public static int version = 28;
 
     public DatabaseHelper(@Nullable Context context) {
 
@@ -139,6 +139,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String sql = "SELECT * FROM Amenity WHERE category = '"+category+"';";
         return selectTable(sql);
     }
+    public ArrayList<String>[] selectProfessorAll(){
+        String sql = "SELECT affiliation, name, CallNumber, officeNumber FROM ProfessorCallNumbers;";
+        return selectTable(sql);
+    }
 
     public ArrayList<String>[] selectProfessorUsingName(String name){
         String sql = "SELECT affiliation, name, CallNumber, officeNumber FROM ProfessorCallNumbers WHERE name = '"+name+"';";
@@ -150,16 +154,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return selectTable(sql);
     }
     public ArrayList<String>[] selectCallNumbersAll(){
-        String sql = "SELECT affiliation, sub_affiliation, name, CallNumber, office_number FROM ProfessorCallNumbers;";;
+        String sql = "SELECT affiliation, sub_affiliation, name, CallNumber, office_number FROM CallNumbers;";;
         return selectTable(sql);
     }
     public ArrayList<String>[] selectCallNumbersUsingName(String name){
-        String sql = "SELECT affiliation, sub_affiliation, name, CallNumber, office_number FROM ProfessorCallNumbers WHERE name = '"+name+"';";;
+        String sql = "SELECT affiliation, sub_affiliation, name, CallNumber, office_number FROM CallNumbers WHERE name = '"+name+"';";;
         return selectTable(sql);
     }
 
     public ArrayList<String>[] selectCallNumbersUsingAffiliation(String affiliation){
-        String sql = "SELECT affiliation, sub_affiliation, name, CallNumber, office_number FROM ProfessorCallNumbers WHERE affiliation = '"+affiliation+"';";;
+        String sql = "SELECT affiliation, sub_affiliation, name, CallNumber, office_number FROM CallNumbers WHERE affiliation = '"+affiliation+"';";;
         return selectTable(sql);
     }
 

@@ -22,20 +22,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class University_Number extends Fragment{
-    public DatabaseHelper num_DB;
+    public DatabaseHelper call_DB;
     ArrayList<String>[] num_Info;
+    ArrayList<String>[] pro_Info;
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.university_number_fragment, container, false);
-        num_DB = new DatabaseHelper(getContext());
-        num_Info = num_DB.selectCallNumbersAll();
-
+        call_DB = new DatabaseHelper(getContext());
+        num_Info = call_DB.selectCallNumbersAll();
+        pro_Info = call_DB.selectProfessorAll();
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.rview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         List<String> itemList = new ArrayList<>();
         for (int i = 0; i < num_Info.length; i++) {
             String str = "";
             for(int j = 0; j < num_Info[i].size(); j++){
+                if(j==1 || j==2)
+                    str+="\n";
                 str = str + num_Info[i].get(j)+" ";
+            }
+            itemList.add(str);
+        }
+
+        for (int i = 0; i < pro_Info.length; i++) {
+            String str = "";
+            for(int j = 0; j < pro_Info[i].size(); j++){
+                if(j==2 || j==3)
+                    str+="\n";
+                str = str + pro_Info[i].get(j)+" ";
             }
             itemList.add(str);
         }
