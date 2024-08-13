@@ -1,8 +1,19 @@
 <resources>
-    <string name="app_name">SummerProject2024</string>
+    <string name="app_name">한신대앱</string>
 
-    <string name="map_page">학교 지도</string>
-    <string name="num_page">전화 번호</string>
-    <string name="town_page">주변 상권</string>
-    <string name="schedule_page">학사 일정</string>
+
+    <!--Main-->
+    <string name="map_page">학교지도</string>
+    <string name="num_page">전화번호</string>
+    <string name="uni_number">교내 전화번호</string>
+    <string name="prof_number">교수 전화번호</string>
+    <string name="town_page">주변상권</string>
+    <string name="schedule_page">학사일정</string>
+
+    <!--Menu Connect Link-->
+    <string name="homepage">학교 홈페이지</string>
+    <string name="lms">lms</string>
+    <string name="hsctis">한신종합정보</string>
+    <string name="attend">전자출결</string>
+    <string name="sugang">수강신청</string>
 </resources>

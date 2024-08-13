@@ -21,7 +21,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.summerproject2024.Calendar.Calendar_fragment;
 import com.example.summerproject2024.Campus_map.Campus_map;
-import com.example.summerproject2024.Information.University_Number;
+import com.example.summerproject2024.Number.University_Number;
 import com.example.summerproject2024.Information.University_Town_Info;
 import com.google.android.material.navigation.NavigationView;
 

@@ -5,25 +5,25 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/menu_map"
-            android:title="학교지도"
+            android:title="@string/map_page"
             android:checkable="true"
             android:checked="true"/>
 
         <item
             android:id="@+id/menu_schedule"
-            android:title="학사일정"
+            android:title="@string/schedule_page"
             android:checkable="true"
             android:checked="false"/>
 
         <item
             android:id="@+id/menu_university_number"
-            android:title="전화번호 검색"
+            android:title="@string/num_page"
             android:checkable="true"
             android:checked="false"/>
 
         <item
             android:id="@+id/menu_town_info"
-            android:title="상권"
+            android:title="@string/town_page"
             android:checkable="true"
             android:checked="false"/>
     </group>
@@ -32,31 +32,31 @@
         android:id="@+id/link_group">
         <item
             android:id="@+id/menu_homepage"
-            android:title="학교 홈페이지"
+            android:title="@string/homepage"
             android:checkable="false"
             android:checked="false"/>
 
         <item
             android:id="@+id/menu_lms"
-            android:title="lms"
+            android:title="@string/lms"
             android:checkable="false"
             android:checked="false"/>
 
         <item
             android:id="@+id/menu_hsctis"
-            android:title="한신종합정보"
+            android:title="@string/hsctis"
             android:checkable="false"
             android:checked="false"/>
 
         <item
             android:id="@+id/menu_attend"
-            android:title="전자출결"
+            android:title="@string/attend"
             android:checkable="false"
             android:checked="false"/>
 
         <item
             android:id="@+id/menu_sugang"
-            android:title="수강신청"
+            android:title="@string/sugang"
             android:checkable="false"
             android:checked="false"/>
     </group>

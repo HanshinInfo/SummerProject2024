@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     android:elevation="4dp"
-    android:background="#7008CD"
+    android:background="@color/sub_bgColor"
     app:contentInsetStart="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
