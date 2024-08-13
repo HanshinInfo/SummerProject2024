@@ -4,7 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ListView;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,28 +18,34 @@ import java.util.ArrayList;
 
 public class University_Town_Info extends Fragment {
 
+    private ListView list;
     public DatabaseHelper townDB;
     ArrayList<String>[] town_Info;
 
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.university_town_fragment, container, false);
+
+        list = view.findViewById(R.id.list);  // Ensure the ID matches the one in your XML layout
 
         townDB = new DatabaseHelper(getContext());
         town_Info = townDB.selectBusinessZone();
-        
-//        참고용 코드
-//        TextView test = (TextView) view.findViewById(R.id.test);
-//        String testList = "";
-//
-//        for(int i = 0; i < town_Info.length; i++){
-//            for(int j = 0; j < town_Info[i].size(); j++){
-//                testList += town_Info[i].get(j);
-//            }
-//            testList += "\n";
-//        }
-//
-//        test.setText(testList);
 
+        ArrayList<String> displayList = new ArrayList<>();
+        for (int i = 0; i < town_Info[0].size(); i++) {
+            for (int j = 0; j < town_Info[i].size(); j++) {
+                String item = town_Info[i].get(j);
+                displayList.add(item);
+            }
+
+            // Setting up the adapter and connecting it to the ListView
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, displayList);
+            list.setAdapter(adapter);
+
+
+        }
         return view;
     }
+
 }
+
