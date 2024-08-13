@@ -5,4 +5,8 @@
 
     <color name="sub_bgColor">#957EEC</color>
     <color name="main_bgColor">#F9F8FF</color>
+
+    <color name="selected_color">#FFDDDD</color>
+    <color name="default_color">#FFFFFF</color>
+    <color name="border_color">#CCCCCC</color>
 </resources>

@@ -1,17 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/NumberTextView"
+        android:id="@+id/monthText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="학사일정"
+        android:layout_marginTop="21dp"
+        android:layout_marginBottom="21dp"
+        android:padding="16dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/day_of_the_week"
+        app:layout_constraintEnd_toStartOf="@+id/nextMonthButton"
+        app:layout_constraintStart_toEndOf="@+id/prevMonthButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/day_of_the_week"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/recyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/monthText">
+
+        <TextView
+            android:id="@+id/Sun"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/sunday"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/Mon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/monday"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/Tue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/tuesday"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/Wed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/wednesday"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/Thu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/thursday"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/Fri"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/friday"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/Sat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/saturday"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <!-- 이전 달 넘김 버튼 -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:overScrollMode="always"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="@id/schedule_edit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/day_of_the_week"
+        app:spanCount="5"
+        tools:listitem="@layout/item_calendar_day" />
+
+    <ImageButton
+        android:id="@+id/prevMonthButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/day_of_the_week"
+        app:layout_constraintEnd_toStartOf="@+id/monthText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/chevron_left"
+        android:contentDescription="@string/previous_month" />
+
+    <!-- 다음 달 넘김 버튼 -->
+    <ImageButton
+        android:id="@+id/nextMonthButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/day_of_the_week"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/monthText"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/chevron_right"
+        android:contentDescription="@string/next_month" />
+
+    <!-- 일정 추가 버튼 -->
+    <LinearLayout
+        android:id="@+id/schedule_edit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/recyclerView">
+
+        <Button
+            android:id="@+id/addScheduleButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:text="@string/add_schedule"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@+id/deleteScheduleButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:text="@string/delete_schedule"
+            style="?android:attr/buttonBarButtonStyle" />
+    </LinearLayout>
+
+    <!-- 일정 삭제 버튼 -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
