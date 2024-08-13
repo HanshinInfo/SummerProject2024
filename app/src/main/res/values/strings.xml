@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">한신대앱</string>
-
+    <string name="app_name">HanshinInfo</string>
 
     <!--Main-->
     <string name="map_page">학교지도</string>
