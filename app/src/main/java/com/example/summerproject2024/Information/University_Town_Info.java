@@ -32,7 +32,7 @@ public class University_Town_Info extends Fragment {
         town_Info = townDB.selectBusinessZone();
 
         ArrayList<String> displayList = new ArrayList<>();
-        for (int i = 0; i < town_Info[0].size(); i++) {
+        for (int i = 0; i < town_Info.length; i++) {
             for (int j = 0; j < town_Info[i].size(); j++) {
                 String item = town_Info[i].get(j);
                 displayList.add(item);
