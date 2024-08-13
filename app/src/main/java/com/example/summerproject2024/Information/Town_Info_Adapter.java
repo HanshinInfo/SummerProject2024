@@ -12,12 +12,12 @@ import com.example.summerproject2024.R;
 
 import java.util.ArrayList;
 
-public class MyAdapter extends BaseAdapter {
+public class Town_Info_Adapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<String>[] items;
 
-    public MyAdapter(Context context, ArrayList<String>[] items) {
+    public Town_Info_Adapter(Context context, ArrayList<String>[] items) {
         this.context = context;
         this.items = items;
     }
@@ -40,7 +40,7 @@ public class MyAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.listitem, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.town_info_item, parent, false);
         }
 
         ImageView imageView = convertView.findViewById(R.id.image);
