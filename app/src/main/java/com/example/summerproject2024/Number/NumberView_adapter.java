@@ -1,4 +1,4 @@
-package com.example.summerproject2024;
+package com.example.summerproject2024.Number;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -6,22 +6,25 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.summerproject2024.R;
+
 import java.util.List;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
+public class NumberView_adapter extends RecyclerView.Adapter<NumberView_adapter.MyViewHolder> {
 
     private List<String> itemList;
     private String[] mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
-    public MyAdapter(List<String> itemList) {
+    public NumberView_adapter(List<String> itemList) {
         this.itemList = itemList;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.number_view_item, parent, false);
         return new MyViewHolder(view);
     }
 
@@ -40,7 +43,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
         MyViewHolder(View itemView) {
             super(itemView);
-            textView = itemView.findViewById(R.id.textView);
+            textView = itemView.findViewById(R.id.NumberTextView);
             itemView.setOnClickListener(this);
         }
         @Override

@@ -1,21 +1,16 @@
-package com.example.summerproject2024.Information;
+package com.example.summerproject2024.Number;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.summerproject2024.DB.DatabaseHelper;
-import com.example.summerproject2024.MyAdapter;
 import com.example.summerproject2024.R;
 
 import java.util.ArrayList;
@@ -53,7 +48,7 @@ public class University_Number extends Fragment{
             itemList.add(str);
         }
 
-        MyAdapter adapter = new MyAdapter(itemList);
+        NumberView_adapter adapter = new NumberView_adapter(itemList);
         recyclerView.setAdapter(adapter);
         return view;
     }

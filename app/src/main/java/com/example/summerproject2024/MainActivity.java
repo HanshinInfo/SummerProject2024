@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -21,11 +19,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.summerproject2024.Calendar.Calendar_fragment;
 import com.example.summerproject2024.Campus_map.Campus_map;
-import com.example.summerproject2024.Information.University_Number;
+import com.example.summerproject2024.Number.University_Number;
 import com.example.summerproject2024.Information.University_Town_Info;
 import com.google.android.material.navigation.NavigationView;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
