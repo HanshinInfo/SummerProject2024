@@ -6,6 +6,7 @@ import android.os.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 public class Splash extends AppCompatActivity {
 
@@ -16,6 +17,8 @@ public class Splash extends AppCompatActivity {
 
         Handler hd = new Handler();
         hd.postDelayed(new SplashHandler(), 2000);
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         // 권한 요청
         PermissionUtils.requestPermissions(this);

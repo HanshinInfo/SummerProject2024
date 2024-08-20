@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static String dbName = "Android.db";
-    public static int version = 28;
+    public static int version = 30;
 
     public DatabaseHelper(@Nullable Context context) {
 
@@ -30,6 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(createTableCoordinate());
         db.execSQL(createTableCallNumbers());
         db.execSQL(createTableProfessorCallNumbers());
+        db.execSQL(createTableMascot());
 
         //InsertTable
         db.execSQL(insertBusinessZone());
@@ -38,6 +39,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(insertCoordinate());
         db.execSQL(insertCallNumbers());
         db.execSQL(insertProfessor());
+        db.execSQL(insertMascot());
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
@@ -103,6 +105,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.moveToFirst();
 
         return cursor.getString(0);
+    }
+
+    public ArrayList<String> selectMascot(String mascot_name){
+        ArrayList<String> mascotList = new ArrayList<String>();
+
+        String sql = "SELECT * FROM Mascot WHERE name = '"+ mascot_name + "';";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+
+        while(cursor.moveToNext()){
+            for(int i = 0; i < cursor.getColumnCount(); i++){
+                mascotList.add(cursor.getString(i).replaceAll("<comma>", ","));
+            }
+        }
+
+        return mascotList;
     }
 
     public ArrayList<String> selectCategoryUsingAmenity(String building_code){
@@ -173,7 +192,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "DROP TABLE IF EXISTS ProfessorCallNumbers;\n" +
                 "DROP TABLE IF EXISTS Amenity;\n" +
                 "DROP TABLE IF EXISTS Coordinate;\n" +
-                "DROP TABLE IF EXISTS Building;";
+                "DROP TABLE IF EXISTS Building;\n" +
+                "DROP TABLE IF EXISTS Mascot;";
         return sql;
     }
     public String createTableBusinessZone(){
@@ -190,8 +210,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public String createTableBuilding(){
         String sql = "CREATE TABLE IF NOT EXISTS Building (\n" +
-                "    building_code TEXT PRIMARY KEY,\n" +
-                "    building_name TEXT\n" +
+                "building_code TEXT PRIMARY KEY,\n" +
+                "building_name TEXT\n" +
                 ");";
         return sql;
     }
@@ -238,6 +258,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "    CallNumber TEXT NOT NULL,\n" +
                 "    officeNumber TEXT\n" +
                 ");\n";
+        return sql;
+    }
+
+    public String createTableMascot(){
+        String sql = "CREATE TABLE IF NOT EXISTS Mascot (\n" +
+                "    name TEXT PRIMARY KEY,\n" +
+                "    gender TEXT,\n" +
+                "    hobby TEXT,\n" +
+                "    specialty TEXT,\n" +
+                "    dislike TEXT,\n" +
+                "    birthBackground TEXT,\n" +
+                "    source TEXT\n" +
+                ");";
         return sql;
     }
 
@@ -347,6 +380,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //                "('bus', '183', '1032', '518', '1163');";
         return sql;
     }
+
+    public String insertMascot(){
+        String ku_o = "오래전에 멸종한 종이지만<comma> 대한민국에 아직 사라지지 않은 강인한 공룡인 「쿠오」는 오랜 세월이 " +
+                "흘러도 믿음과 진보적인 끈기를 잃지 않고 성장하는 한신대학교와 많이 닮았다. " +
+                "1940년 대한민국이 혼란하던 시기에 조선신학원(한신대학교)이 어렵게 설립되면서 신학을 전하고자 하던 " +
+                "굳건한 마음과 지식을 전하고자 하는 학도들의 믿음의 씨앗이 모여 하나의 큰 일이 되었다. " +
+                "1970년대 말 오산으로 부지를 옮기며 한신대학이 종합화가 되어 또 다른 시작을 할 때 큰일에서 " +
+                "한신대학교와 똑 닮은 쿠오가 탄생했다. " +
+                "현재 한신대학교 오산캠퍼스의 모양이 쿠오와 닮아있는 것도 이 때문이라는 컨셉이다.";
+        String hangomi = "「한고미」 는 본래 한신대학교 뒷산에 홀로 살던 파란색 곰이었으나<comma> 오산캠퍼스 설립시기에 우연히 내려와 우리 학교에서 지내게 되었다. " +
+                "한신대학교 투쟁 역사와 함께하면서 몸에 열(빨간색)이 올랐는데<comma> 점점 본래의 색과 섞이며 털이 우리 학교 교색과 같은 보랏빛으로 바뀌었다.\n\n " +
+                "평소에는 무던하고 우리 학교 구성원들과 어울리는 것을 좋아하는 성격이다. 그러나 불의를 보면 묵인하지 않고 부당한 상황에 맞서는 평화 중재자의 면모를 지녔다. " +
+                "국내 토착종이자 우리 민족의 상징이라고 볼 수 있는 반달가슴곰으로<comma> 곰의 고대국어 <고마>에서 유래됐다.";
+
+        String buzzi = "「버지」는 무한한 가능성과 잠재력이 있는 한신대학교 학생들과 닮아있다. " +
+                "한신대학교의 수많은 벚나무 벚꽃 중에서도 작고 비완전체인 벚꽃 한 잎 일지라도 쿠오와 함께 자신을 탐구하고 열정적으로 꿈을 찾아 나아간다.";
+
+        String hanggu = " 「한꾸」는 한신대학교의 꿈 꾸는 아기호랑이로<comma> 무엇이든 꿈 꿀 수 있고 무엇이든 될 수 있는 한신대학교 학생을 상징한 캐릭터이다. " +
+                "백호 한꾸의 얼굴 무늬는 한신의 HS로 이루어져 있다. 한꾸는 항상 자신의 꿈을 위해 뛰어다녀 앞머리가 회오리 모양으로 고정되어 있다. " +
+                "이는 목표를 이루기 위해 고군부투하는 우리 학생들의 의지를 상징한다.\n\n " +
+                "한신대학교의 꿈 꾸는 아기호랑이 한꾸는 정직하고 상냥한 성격을 가졌으며 누구를 만나도 먼저 인사하는 인기인이다. " +
+                "용맹한 호랑이로 도전을 두려워하지 않으며 모든 활동을 경험하고 싶어해 항상 바쁘게 뛰어다니기 때문에 앞머리는 항상 바람 모양으로 돌돌 말려있다. " +
+                "도전을 두려워하는 친구를 만날 때마다 항상 성과가 어떻든 한 번 해보라는 말을 해주며 도전을 두려워하지 않는 한꾸가 도전자체가 값전 것이라는 메시지를 전달한다.";
+
+        String sql = "INSERT INTO Mascot (name, gender, hobby, specialty, dislike, birthBackground, source) VALUES\n" +
+                "('쿠오 (KU-O)', '?', '순찰하기<comma> 새로운 길 탐색하기<comma> 퍼즐 맞추기', '발차기', '대충', '" + ku_o + "', '쿠오와 버지'), \n" +
+                "('한고미 (HANGOMI)', '?', '학교 앞 맛집 탐방<comma> 한신공원 산책', '교수님과 학생들의 소통창구 되어주기', '?', '" + hangomi + "', '한고미'), \n" +
+                "('버지 (BUZZI)', '?', '독서', '철학<comma> 경제<comma> 그림<comma> 컴퓨터<comma> 외국어<comma> 체육', '송충이', '"+ buzzi + "', '쿠오와 버지'), \n" +
+                "('한꾸 (HANGGU)', '?', '?', '?', '?', '" + hanggu + "', '한꾸');";
+
+        return sql;
+    }
+
     public String insertCallNumbers() {
         String sql = "INSERT INTO CallNumbers (affiliation, sub_affiliation, name, CallNumber, office_number) VALUES\n" +
                 "('한신대학교','총장','강성영','031-379-0001','1201'),\n" +
