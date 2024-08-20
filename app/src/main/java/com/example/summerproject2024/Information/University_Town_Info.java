@@ -41,8 +41,6 @@ public class University_Town_Info extends Fragment {
             // Setting up the adapter and connecting it to the ListView
             ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, displayList);
             list.setAdapter(adapter);
-
-
         }
         return view;
     }

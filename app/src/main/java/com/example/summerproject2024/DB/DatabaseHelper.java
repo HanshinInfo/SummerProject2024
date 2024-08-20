@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static String dbName = "Android.db";
-    public static int version = 30;
+    public static int version = 31;
 
     public DatabaseHelper(@Nullable Context context) {
 
@@ -211,8 +211,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public String createTableBuilding(){
         String sql = "CREATE TABLE IF NOT EXISTS Building (\n" +
                 "building_code TEXT PRIMARY KEY,\n" +
-                "building_name TEXT\n" +
-                ");";
+                "building_name TEXT );";
         return sql;
     }
 
@@ -287,7 +286,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "    ('복고다방한신대점', '오산시', '카페', '', ''),\n" +
                 "    ('미소김밥', '경기도 오산시 양산동 386번지 1층', '김밥전문 음식점', '', ''),\n" +
                 "    ('맘스터치한신대점', '경기도 오산시 양산동 438-1', '패스트푸드 음식점', '', ''),\n" +
-                "    ('유림짱당구클럽', '경기도 오산시 양산동 305-7번지', '당구장', '', ''),\n" +
                 "    ('CU 편의점', '오산시', '편의점', '', ''),\n" +
                 "    ('요거프레스', '경기도 오산시 양산동 382-3', '카페', '', ''),\n" +
                 "    ('봉구스밥버거 한신대점', '경기도 오산시 세마동 한신대길 126', '음식점', '', ''),\n" +
