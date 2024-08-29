@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,33 +14,43 @@ import com.example.summerproject2024.DB.DatabaseHelper;
 import com.example.summerproject2024.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class University_Town_Info extends Fragment {
 
     private ListView list;
-    public DatabaseHelper townDB;
-    ArrayList<String>[] town_Info;
+    private DatabaseHelper townDB;
+    private ArrayList<String>[] town_Info;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.university_town_fragment, container, false);
 
-        list = view.findViewById(R.id.list);  // Ensure the ID matches the one in your XML layout
+        list = view.findViewById(R.id.list);
 
         townDB = new DatabaseHelper(getContext());
-        town_Info = townDB.selectBusinessZone();
+        town_Info = townDB.selectBusinessZone("목");
 
-        ArrayList<String> displayList = new ArrayList<>();
+
+        List<Item> items = new ArrayList<>();
+
+
+
         for (int i = 0; i < town_Info.length; i++) {
-            for (int j = 0; j < town_Info[i].size(); j++) {
-                String item = town_Info[i].get(j);
-                displayList.add(item);
-            }
+            String name = town_Info[i].get(0);       // 이름
+            String category = town_Info[i].get(1);   // 카테고리
+            String hours = town_Info[i].get(2);   // 영업 시간
 
-            // Setting up the adapter and connecting it to the ListView
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, displayList);
-            list.setAdapter(adapter);
+            int imageResourceId = R.drawable.icon_beer;
+
+            items.add(new Item(name, category, hours, imageResourceId));
         }
+
+        CustomAdapter adapter = new CustomAdapter(getContext(), items);
+            list.setAdapter(adapter);
+
+
+
         return view;
     }
 
