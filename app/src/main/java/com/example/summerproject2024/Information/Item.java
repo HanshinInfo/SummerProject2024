@@ -1,30 +1,32 @@
 package com.example.summerproject2024.Information;
 
 
+import android.graphics.drawable.Drawable;
+
 public class Item {
     private String name;
-    private String location;
     private String category;
-    private int imageResourceId;
+    private String hours;
+    private int icon;
 
 
-    public Item(String name, String location, String category, int imageResourceId) {
+    public Item(String name, String category, String hours, int icon) {
         this.name = name;
-        this.location = location;
-        this.imageResourceId = imageResourceId;
         this.category = category;
+        this.hours = hours;
+        this.icon = icon;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getLocation() {
-        return location;
+    public String getHours() {
+        return hours;
     }
 
     public int getImageResourceId() {
-        return imageResourceId;
+        return icon;
     }
 
     public String getCategory() {

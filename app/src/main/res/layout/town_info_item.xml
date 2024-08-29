@@ -21,7 +21,7 @@
         android:textStyle="bold"/>
 
     <TextView
-        android:id="@+id/location"
+        android:id="@+id/category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/name"
@@ -31,10 +31,10 @@
         android:textSize="15dip" />
 
     <TextView
-        android:id="@+id/category"
+        android:id="@+id/hours"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/location"
+        android:layout_below="@+id/category"
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/image"
         android:textColor="#666666"

@@ -29,7 +29,7 @@ public class University_Town_Info extends Fragment {
         list = view.findViewById(R.id.list);
 
         townDB = new DatabaseHelper(getContext());
-        town_Info = townDB.selectBusinessZone();
+        town_Info = townDB.selectBusinessZone("목");
 
 
         List<Item> items = new ArrayList<>();
@@ -38,12 +38,12 @@ public class University_Town_Info extends Fragment {
 
         for (int i = 0; i < town_Info.length; i++) {
             String name = town_Info[i].get(0);       // 이름
-            String location = town_Info[i].get(1);   // 위치
-            String category = town_Info[i].get(2);   // 카테고리
+            String category = town_Info[i].get(1);   // 카테고리
+            String hours = town_Info[i].get(2);   // 영업 시간
 
-            int imageResourceId = R.drawable.android_test;
+            int imageResourceId = R.drawable.icon_beer;
 
-            items.add(new Item(name, location, category, imageResourceId));
+            items.add(new Item(name, category, hours, imageResourceId));
         }
 
         CustomAdapter adapter = new CustomAdapter(getContext(), items);
