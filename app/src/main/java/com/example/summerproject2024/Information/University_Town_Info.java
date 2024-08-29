@@ -10,6 +10,8 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.summerproject2024.DB.DatabaseHelper;
 import com.example.summerproject2024.R;
@@ -21,6 +23,12 @@ import java.util.HashMap;
 import java.util.List;
 
 public class University_Town_Info extends Fragment {
+
+    //FragmentManager
+    private static FragmentManager fragmentManager;
+    private static FragmentTransaction transaction;
+
+    private Town_Information_Page townInformationPage;
 
     private ListView list;
     private DatabaseHelper townDB;
@@ -39,10 +47,11 @@ public class University_Town_Info extends Fragment {
 
         day = getCurrentDay();
 
+        townInformationPage = new Town_Information_Page();
         townDB = new DatabaseHelper(getContext());
         town_Info = townDB.selectBusinessZone();
 
-        List<Item> items = new ArrayList<>();
+        ArrayList<Item> items = new ArrayList<>();
 
         iconMap = new HashMap<String, Integer>();
 
@@ -64,7 +73,11 @@ public class University_Town_Info extends Fragment {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+                transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                Bundle bundle = new Bundle();
+                bundle.putString("townName", "한신식당");
+                townInformationPage.setArguments(bundle);
+                transaction.replace(R.id.fragment_container_view, townInformationPage).commitAllowingStateLoss();
             }
         });
 

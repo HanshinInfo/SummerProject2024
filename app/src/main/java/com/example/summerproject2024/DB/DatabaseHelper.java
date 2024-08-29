@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static String dbName = "Android.db";
-    public static int version = 32;
+    public static int version = 34;
 
     public DatabaseHelper(@Nullable Context context) {
 
@@ -146,6 +146,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return selectTable(sql);
     }
 
+
+    public ArrayList<String> selectTownInfo(String name) {
+        ArrayList<String> list = new ArrayList<String>();
+        String sql = "SELECT location, number, link FROM BusinessZone WHERE name = '" + name + "'; ";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+
+        while(cursor.moveToNext()){
+            for(int i = 0; i < cursor.getColumnCount(); i++){
+                list.add(cursor.getString(i));
+            }
+        }
+
+        return list;
+    }
+
     public String selectBusinessHours(String name, String day){
         String hours = "정보 없음";
 
@@ -207,6 +224,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public String deleteTable(){
         String sql = "DROP TABLE IF EXISTS BusinessZone;\n" +
+                "DROP TABLE IF EXISTS BusinessHours;\n" +
                 "DROP TABLE IF EXISTS CallNumbers;\n" +
                 "DROP TABLE IF EXISTS ProfessorCallNumbers;\n" +
                 "DROP TABLE IF EXISTS Amenity;\n" +
