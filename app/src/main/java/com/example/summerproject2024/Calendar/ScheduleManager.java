@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.view.View;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -12,15 +13,26 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class ScheduleManager {
     private final Context context;
     private final List<Schedule> schedules;
+    private final Calendar currentCalendar;
 
-    public ScheduleManager(Context context) {
+    public ScheduleManager(Context context, Calendar currentCalendar) {
         this.context = context;
+        this.currentCalendar = currentCalendar;
         this.schedules = loadSchedulesFromFile();
+    }
+
+    // 현재 선택된 날짜를 포맷팅하여 반환
+    private String getSelectedDate() {
+        int year = currentCalendar.get(Calendar.YEAR);
+        int month = currentCalendar.get(Calendar.MONTH) + 1; // 월은 0부터 시작하므로 +1
+        int day = currentCalendar.get(Calendar.DAY_OF_MONTH);
+        return String.format("%d-%02d-%02d", year, month, day);
     }
 
     // 일정을 파일에 저장
@@ -65,7 +77,9 @@ public class ScheduleManager {
     }
 
     // 다이얼로그를 통해 일정 추가
-    public void showAddScheduleDialog(String date) {
+    public void showAddScheduleDialog() {
+        String selectedDate = getSelectedDate();
+
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Add Schedule");
 
@@ -74,7 +88,7 @@ public class ScheduleManager {
 
         builder.setPositiveButton("Add", (dialog, which) -> {
             String scheduleText = input.getText().toString();
-            schedules.add(new Schedule(date, scheduleText));
+            schedules.add(new Schedule(selectedDate, scheduleText));
             saveSchedulesToFile();
         });
 
@@ -84,13 +98,15 @@ public class ScheduleManager {
     }
 
     // 다이얼로그를 통해 일정 삭제
-    public void showDeleteScheduleDialog(String date) {
+    public void showDeleteScheduleDialog() {
+        String selectedDate = getSelectedDate();
+
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Delete Schedule");
 
         List<String> matchingSchedules = new ArrayList<>();
         for (Schedule schedule : schedules) {
-            if (schedule.getDate().equals(date)) {
+            if (schedule.getDate().equals(selectedDate)) {
                 matchingSchedules.add(schedule.getDescription());
             }
         }
@@ -103,7 +119,7 @@ public class ScheduleManager {
         String[] scheduleArray = matchingSchedules.toArray(new String[0]);
         builder.setItems(scheduleArray, (dialog, which) -> {
             String selectedSchedule = scheduleArray[which];
-            schedules.removeIf(schedule -> schedule.getDate().equals(date) && schedule.getDescription().equals(selectedSchedule));
+            schedules.removeIf(schedule -> schedule.getDate().equals(selectedDate) && schedule.getDescription().equals(selectedSchedule));
             saveSchedulesToFile();
             Toast.makeText(context, "Schedule deleted successfully!", Toast.LENGTH_SHORT).show();
         });
@@ -111,5 +127,13 @@ public class ScheduleManager {
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
         builder.show();
+    }
+
+    // 버튼 클릭 리스너 설정
+    public void setAddScheduleButtonListener(View button) {
+        button.setOnClickListener(v -> showAddScheduleDialog());
+    }
+    public void setDeleteScheduleButtonListener(View button) {
+        button.setOnClickListener(v -> showDeleteScheduleDialog());
     }
 }

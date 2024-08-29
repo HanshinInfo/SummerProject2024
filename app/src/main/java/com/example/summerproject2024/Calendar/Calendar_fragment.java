@@ -33,7 +33,7 @@ public class Calendar_fragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 7));
 
         currentCalendar = Calendar.getInstance(); // 초기화
-        scheduleManager = new ScheduleManager(getContext()); // ScheduleManager 초기화
+        scheduleManager = new ScheduleManager(getContext(), currentCalendar); // ScheduleManager 초기화
 
         List<Integer> days = CalendarUtils.generateCalendarData(currentCalendar);
         int currentMonth = currentCalendar.get(Calendar.MONTH);
@@ -47,6 +47,10 @@ public class Calendar_fragment extends Fragment {
         // 버튼 클릭 리스너 설정
         view.findViewById(R.id.prevMonthButton).setOnClickListener(v -> CalendarUtils.moveToPreviousMonth(currentCalendar, adapter, monthText));
         view.findViewById(R.id.nextMonthButton).setOnClickListener(v -> CalendarUtils.moveToNextMonth(currentCalendar, adapter, monthText));
+
+        // 일정 추가 버튼 클릭 리스너를 ScheduleManager를 통해 설정
+        scheduleManager.setAddScheduleButtonListener(view.findViewById(R.id.addScheduleButton));
+        scheduleManager.setDeleteScheduleButtonListener(view.findViewById(R.id.deleteScheduleButton));
 
         return view;
     }
