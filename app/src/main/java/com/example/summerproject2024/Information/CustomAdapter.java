@@ -46,13 +46,15 @@ public class CustomAdapter extends BaseAdapter {
 
         ImageView imageView = convertView.findViewById(R.id.image);
         TextView nameView = convertView.findViewById(R.id.name);
-        TextView locationView = convertView.findViewById(R.id.location);
+        TextView categoryView = convertView.findViewById(R.id.category);
+        TextView hoursView = convertView.findViewById(R.id.hours);
 
 
         Item item = items.get(position);
 
         nameView.setText(item.getName());
-        locationView.setText(item.getLocation());
+        categoryView.setText(item.getCategory());
+        hoursView.setText(item.getHours());
         imageView.setImageResource(item.getImageResourceId());
 
         return convertView;
