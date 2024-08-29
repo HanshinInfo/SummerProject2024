@@ -3,6 +3,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,32 +26,44 @@ public class University_Number extends Fragment{
         call_DB = new DatabaseHelper(getContext());
         num_Info = call_DB.selectCallNumbersAll();
         pro_Info = call_DB.selectProfessorAll();
+
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.rview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        List<String> itemList = new ArrayList<>();
+
+        List<List<String>> itemList = new ArrayList<>();
+        int ind = 0;
+        for(int i=0; i<=num_Info.length; i++){
+            itemList.add(new ArrayList<String>());
+        }
+
         for (int i = 0; i < num_Info.length; i++) {
-            String str = "";
             for(int j = 0; j < num_Info[i].size(); j++){
-                if(j==1 || j==2)
-                    str+="\n";
-                str = str + num_Info[i].get(j)+" ";
+                itemList.get(ind).add(num_Info[i].get(j));
             }
-            itemList.add(str);
+            ind+=1;
         }
-
+        for(int i=0; i<=pro_Info.length; i++){
+            itemList.add(new ArrayList<String>());
+        }
         for (int i = 0; i < pro_Info.length; i++) {
-            String str = "";
             for(int j = 0; j < pro_Info[i].size(); j++){
-                if(j==2 || j==3)
-                    str+="\n";
-                str = str + pro_Info[i].get(j)+" ";
+                itemList.get(ind).add(pro_Info[i].get(j));
             }
-            itemList.add(str);
+            ind+=1;
         }
-
         NumberView_adapter adapter = new NumberView_adapter(itemList);
+
+        adapter.setOnItemClickListener(new NumberView_adapter.OnItemClickListener() {
+            @Override
+            public void onItemClicked(int position, String data) {
+
+            }
+        });
         recyclerView.setAdapter(adapter);
         return view;
+    }
+    private void showDialog(){
+
     }
 
 }

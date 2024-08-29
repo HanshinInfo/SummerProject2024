@@ -5,9 +5,39 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="15dp">
+
+
+<!--    <TextView-->
+<!--        android:id="@+id/office_number"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="TextView" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/CallNumber"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="TextView" />-->
+
     <TextView
-        android:id="@+id/NumberTextView"
+        android:id="@+id/aff"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="5dp"/>
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_marginTop="3dp"/>
+
+    <TextView
+        android:id="@+id/subaff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"/>
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_marginBottom="3dp"/>
 </LinearLayout>
