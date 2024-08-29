@@ -75,7 +75,7 @@ public class University_Town_Info extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 Bundle bundle = new Bundle();
-                bundle.putString("townName", "한신식당");
+                bundle.putString("townName", adapter.getItem(i).getName());
                 townInformationPage.setArguments(bundle);
                 transaction.replace(R.id.fragment_container_view, townInformationPage).commitAllowingStateLoss();
             }

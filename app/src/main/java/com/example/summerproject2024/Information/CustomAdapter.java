@@ -30,7 +30,7 @@ public class CustomAdapter extends BaseAdapter {
 
 
     @Override
-    public Object getItem(int position) {
+    public Item getItem(int position) {
         return items.get(position);
     }
 
