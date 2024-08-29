@@ -8,6 +8,11 @@
     <string name="prof_number">교수 전화번호</string>
     <string name="town_page">주변상권</string>
     <string name="schedule_page">학사일정</string>
+    <string name="mascot_page">마스코트</string>
+    <string name="mascot_cu_o">쿠오 (KU-O)</string>
+    <string name="mascot_hangomi">한고미 (HANGOMI)</string>
+    <string name="mascot_buzzi">버지 (BUZZI)</string>
+    <string name="mascot_hanggu">한꾸 (HANGGU)</string>
 
     <!--Menu Connect Link-->
     <string name="homepage">학교 홈페이지</string>
@@ -27,4 +32,5 @@
     <string name="previous_month">Sat</string>
     <string name="add_schedule">Add Schedule</string>
     <string name="delete_schedule">Delete Schedule</string>
+
 </resources>

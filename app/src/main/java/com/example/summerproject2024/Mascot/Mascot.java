@@ -35,7 +35,7 @@ public class Mascot extends Fragment {
 
     DatabaseHelper db;
 
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.mascot_fragment, container, false);
 
         image = (ImageView) view.findViewById(R.id.mascot_image);
@@ -49,17 +49,14 @@ public class Mascot extends Fragment {
         source = (TextView) view.findViewById(R.id.mascot_source);
 
         mascotImage = new HashMap<>();
-        mascotImage.put("쿠오 (KU-O)", R.drawable.mascot_ku_o);
-        mascotImage.put("한고미 (HANGOMI)", R.drawable.mascot_hangomi);
-        mascotImage.put("버지 (BUZZI)", R.drawable.mascot_buzzi);
-        mascotImage.put("한꾸 (HANGGU)", R.drawable.mascot_hanggu);
+        mascotImage.put(getResources().getString(R.string.mascot_cu_o), R.drawable.mascot_ku_o);
+        mascotImage.put(getResources().getString(R.string.mascot_hangomi), R.drawable.mascot_hangomi);
+        mascotImage.put(getResources().getString(R.string.mascot_buzzi), R.drawable.mascot_buzzi);
+        mascotImage.put(getResources().getString(R.string.mascot_hanggu), R.drawable.mascot_hanggu);
 
         db = new DatabaseHelper(getContext());
-
-        String name = "한고미 (HANGOMI)";
-
+        String name = this.getArguments().getString("mascot_name");
         SettingPage(name);
-
         return view;
     }
 
