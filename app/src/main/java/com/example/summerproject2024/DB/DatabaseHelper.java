@@ -141,11 +141,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return categoryList;
     }
 
-    public ArrayList<String>[] selectBusinessZone(String day){
-        String sql = "SELECT BusinessZone.name, category, hours " +
-                "FROM BusinessZone, BusinessHours " +
-                "WHERE BusinessZone.name = BusinessHours.name AND day = '" + day + "';";
+    public ArrayList<String>[] selectBusinessZone(){
+        String sql = "SELECT name, category FROM BusinessZone;";
         return selectTable(sql);
+    }
+
+    public String selectBusinessHours(String name, String day){
+        String hours = "정보 없음";
+
+        String sql = "SELECT hours " +
+                "FROM BusinessHours " +
+                "WHERE name = '" + name + "' AND day = '" + day + "';";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+
+        while(cursor.moveToNext()){
+            hours = day + " " + cursor.getString(0);
+        }
+
+        return hours;
     }
 
     public ArrayList<String>[] selectBusinessZoneUsingName(String name){
