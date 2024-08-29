@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static String dbName = "Android.db";
-    public static int version = 28;
+    public static int version = 31;
 
     public DatabaseHelper(@Nullable Context context) {
 
@@ -25,19 +25,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         //CreateTable
         db.execSQL(createTableBusinessZone());
+        db.execSQL(createTableBusinessHours());
         db.execSQL(createTableBuilding());
         db.execSQL(createTableAmenity());
         db.execSQL(createTableCoordinate());
         db.execSQL(createTableCallNumbers());
         db.execSQL(createTableProfessorCallNumbers());
+        db.execSQL(createTableMascot());
 
         //InsertTable
         db.execSQL(insertBusinessZone());
+        db.execSQL(insertBusinessHours());
         db.execSQL(insertBuilding());
         db.execSQL(insertAmenity());
         db.execSQL(insertCoordinate());
         db.execSQL(insertCallNumbers());
         db.execSQL(insertProfessor());
+        db.execSQL(insertMascot());
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
@@ -103,6 +107,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.moveToFirst();
 
         return cursor.getString(0);
+    }
+
+    public ArrayList<String> selectMascot(String mascot_name){
+        ArrayList<String> mascotList = new ArrayList<String>();
+
+        String sql = "SELECT * FROM Mascot WHERE name = '"+ mascot_name + "';";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+
+        while(cursor.moveToNext()){
+            for(int i = 0; i < cursor.getColumnCount(); i++){
+                mascotList.add(cursor.getString(i).replaceAll("<comma>", ","));
+            }
+        }
+
+        return mascotList;
     }
 
     public ArrayList<String> selectCategoryUsingAmenity(String building_code){
@@ -173,7 +194,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "DROP TABLE IF EXISTS ProfessorCallNumbers;\n" +
                 "DROP TABLE IF EXISTS Amenity;\n" +
                 "DROP TABLE IF EXISTS Coordinate;\n" +
-                "DROP TABLE IF EXISTS Building;";
+                "DROP TABLE IF EXISTS Building;\n" +
+                "DROP TABLE IF EXISTS Mascot;";
         return sql;
     }
     public String createTableBusinessZone(){
@@ -182,17 +204,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "    name TEXT,\n" +
                 "    location TEXT default '정보없음',\n" +
                 "    category TEXT,\n" +
-                "    picture TEXT default '정보없음' ,\n" +
+                "    number TEXT default '정보없음' ,\n" +
                 "    link TEXT default '정보없음'\n" +
                 ");";
         return sql;
     }
 
+    public String createTableBusinessHours(){
+        String sql = "CREATE TABLE IF NOT EXISTS BusinessHours( \n" +
+                " name TEXT, \n" +
+                " day TEXT, \n" +
+                " hours TEXT, \n" +
+                " primary key(name, day)); ";
+
+        return sql;
+    }
+
     public String createTableBuilding(){
         String sql = "CREATE TABLE IF NOT EXISTS Building (\n" +
-                "    building_code TEXT PRIMARY KEY,\n" +
-                "    building_name TEXT\n" +
-                ");";
+                "building_code TEXT PRIMARY KEY,\n" +
+                "building_name TEXT );";
         return sql;
     }
 
@@ -241,36 +272,166 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return sql;
     }
 
+    public String createTableMascot(){
+        String sql = "CREATE TABLE IF NOT EXISTS Mascot (\n" +
+                "    name TEXT PRIMARY KEY,\n" +
+                "    gender TEXT,\n" +
+                "    hobby TEXT,\n" +
+                "    specialty TEXT,\n" +
+                "    dislike TEXT,\n" +
+                "    birthBackground TEXT,\n" +
+                "    source TEXT\n" +
+                ");";
+        return sql;
+    }
+
     public String insertBusinessZone(){
-        String sql = "INSERT INTO BusinessZone (name, location, category, picture, link)\n" +
+        String sql = "INSERT INTO BusinessZone (name, location, category, number, link)\n" +
                 "VALUES\n" +
-                "    ('행복한 콩박사', '경기도 오산시 양산로398번길 8-11', '음식점', '', ''),\n" +
-                "    ('한신식당', '경기도 오산시 양산동 294-26', '음식점', '', ''),\n" +
-                "    ('해우리', '경기도 오산시 양산동 한신대길 135 1층', '음식점', '', ''),\n" +
-                "    ('태리로제떡볶이', '경기도 오산시 양산동 399번지 1층', '음식점', '', ''),\n" +
-                "    ('우리반점', '경기도 오산시 양산동 420번지', '음식점', '', ''),\n" +
-                "    ('금덕이네', '경기도 오산시 양산동 434번지 1층', '음식점', '', ''),\n" +
-                "    ('이삭토스트', '경기도 오산시 양산동', '샌드위치', '', ''),\n" +
-                "    ('복고다방한신대점', '오산시', '카페', '', ''),\n" +
-                "    ('미소김밥', '경기도 오산시 양산동 386번지 1층', '김밥전문 음식점', '', ''),\n" +
-                "    ('맘스터치한신대점', '경기도 오산시 양산동 438-1', '패스트푸드 음식점', '', ''),\n" +
-                "    ('유림짱당구클럽', '경기도 오산시 양산동 305-7번지', '당구장', '', ''),\n" +
-                "    ('CU 편의점', '오산시', '편의점', '', ''),\n" +
-                "    ('요거프레스', '경기도 오산시 양산동 382-3', '카페', '', ''),\n" +
-                "    ('봉구스밥버거 한신대점', '경기도 오산시 세마동 한신대길 126', '음식점', '', ''),\n" +
-                "    ('나누리한신대본점', '경기도 오산시 세마동 한신대길 126', '술집', '', ''),\n" +
-                "    ('코리엔탈깻잎두마리치킨', '경기도 오산시 양산동 382-8 1층', '음식점', '', ''),\n" +
-                "    ('GS25 한신대점', '경기도 오산시 양산동 382-4', '편의점', '', ''),\n" +
-                "    ('진현가든', '경기도 오산시 양산동 444-1', '음식점', '', ''),\n" +
-                "    ('해뜨는집', '경기도 오산시 한신대길 118', '한식당', '', ''),\n" +
-                "    ('몽상', '경기도 오산시 양산동 378-4번지 순복음찬양교회 1층', '음식점', '', ''),\n" +
-                "    ('화락', '경기도 오산시 양산로 347', '일식 음식점', '', ''),\n" +
-                "    ('카페 리메인', '경기도 오산시 양산로 351', '카페', '', ''),\n" +
-                "    ('내가찜한닭', '경기도 오산시 양산동 379-1', '음식점', '', ''),\n" +
-                "    ('양산골 주막', '경기도 오산시 양산동 한신대길 113', '술집', '', ''),\n" +
-                "    ('듬뿍만두샤브', '경기도 오산시 세마동 양산로 374', '음식점', '', ''),\n" +
-                "    ('현대E마트', '경기도 오산시 양산동 379-5', '식료품점', '', ''),\n" +
-                "    ('드렁큰할매', '경기도 오산시 양산동 382-8 1층', '술집', '', '');\n";
+                "    ('행복한 콩박사', '경기도 오산시 양산로398번길 8-11', '음식점', '031-372-1232', 'https://map.naver.com/p/search/%ED%96%89%EB%B3%B5%ED%95%9C%EC%BD%A9%EB%B0%95%EC%82%AC/place/33402674?c=15.00,0,0,0,dh&isCorrectAnswer=true'),\n" +
+                "    ('한신식당', '경기도 오산시 양산동 294-26', '음식점', '031-372-3727', 'https://map.naver.com/p/search/%ED%95%9C%EC%8B%A0%EC%8B%9D%EB%8B%B9/place/17883450?c=15.00,0,0,0,dh&placePath=%3Fentry%253Dbmp'),\n" +
+                "    ('해우리', '경기도 오산시 양산동 한신대길 135 1층', '음식점', '0507-1467-2031', 'https://map.naver.com/p/search/%ED%95%B4%EC%9A%B0%EB%A6%AC%20%20%EC%98%A4%EC%82%B0%EC%A0%90/place/1435536079?c=13.00,0,0,0,dh&isCorrectAnswer=true'),\n" +
+                "    ('태리로제떡볶이', '경기 오산시 한신대133번길 4 1층', '음식점', '0507-1392-7626', 'https://map.naver.com/p/entry/place/1182858063?lng=127.0235578&lat=37.1948468&placePath=%2Fhome&searchType=place&c=15.00,0,0,0,dh'),\n" +
+                "    ('우리반점', '경기도 오산시 양산동 420번지', '음식점', '031-372-7551', 'https://map.naver.com/p/search/%EC%9A%B0%EB%A6%AC%EB%B0%98%EC%A0%90/place/1346004577?c=15.00,0,0,0,dh&placePath=%3Fentry%253Dbmp'),\n" +
+                "    ('금덕이네', '경기도 오산시 양산동 434번지 1층', '음식점', '031-375-4777', 'https://map.naver.com/p/search/%EA%B8%88%EB%8D%95%EC%9D%B4%EB%84%A4/place/1589827139?c=15.00,0,0,0,dh&placePath=/home&isCorrectAnswer=true'),\n" +
+                "    ('이삭토스트', '경기 오산시 한신대길 130', '샌드위치', '031-372-3751', 'https://map.naver.com/p/entry/place/1325063257?c=15.00,0,0,0,dh'),\n" +
+                "    ('복고다방한신대점', '경기 오산시 한신대133번길 5 101호', '카페', '0507-1481-7714', 'https://map.naver.com/p/entry/place/1388145793?c=15.00,0,0,0,dh&placePath=/home'),\n" +
+                "    ('미소김밥', '경기 오산시 한신대길 131', '김밥전문 음식점', '031-378-0257', 'https://map.naver.com/p/search/%EB%AF%B8%EC%86%8C%EA%B9%80%EB%B0%A5/place/1989355960?c=15.00,0,0,0,dh&placePath=%3Fentry%253Dbmp'),\n" +
+                "    ('맘스터치한신대점', '경기 오산시 한신대길 126-1', '패스트푸드 음식점', '031-374-7466', 'https://map.naver.com/p/entry/place/1835784842?c=15.00,0,0,0,dh'),\n" +
+                "    ('CU 편의점', '경기 오산시 한신대길 127 (양산동)', '편의점', '1577-8007', 'https://map.naver.com/p/entry/place/1786045993?c=15.00,0,0,0,adh&p=0lddsaZSms3kGLeYTcZ06Q,76.08,6.25,80,Float&isMini=true'),\n" +
+                "    ('요거프레스', '경기 오산시 한신대길 125-1 1층', '카페', '0507-0289-5075', 'https://map.naver.com/p/entry/place/1726407979?c=15.00,0,0,0,adh&p=HI3iJbv5PJpeFd8qa9PTZQ,102.26,17,80,Float&isMini=true'),\n" +
+                "    ('봉구스밥버거 한신대점', '경기 오산시 한신대길 126 주민당구장', '음식점', '031-375-6799', 'https://map.naver.com/p/entry/place/32874940?c=15.00,0,0,0,adh&p=mB06SnYamX-8SZis3DmccA,-117.5,12.38,80,Float&isMini=true&placePath=/home'),\n" +
+                "    ('나누리', '경기도 오산시 세마동 한신대길 126', '술집', '0507-1369-2063', 'https://map.naver.com/p/entry/place/1491352469?lng=127.0229817&lat=37.1957209&placePath=%2Fhome&entry=plt&searchType=place&c=15.00,0,0,0,dh'),\n" +
+                "    ('코리엔탈깻잎두마리치킨', '경기 오산시 한신대길 125', '음식점', '031-374-5850', 'https://map.naver.com/p/search/%EC%BD%94%EB%A6%AC%EC%97%94%ED%83%88%EA%B9%BB%EC%9E%8E%EB%91%90%EB%A7%88%EB%A6%AC%EC%B9%98%ED%82%A8%20%ED%95%9C%EC%8B%A0%EB%8C%80/place/1617458368?c=15.00,0,0,0,dh&isCorrectAnswer=true'),\n" +
+                "    ('GS25 한신대점', '경기 오산시 한신대길 121 대원빌딩', '편의점', '031-375-3704', 'https://map.naver.com/p/entry/place/32080182?c=15.00,0,0,0,dh&placePath=/home'),\n" +
+                "    ('진현가든', '경기도 오산시 양산동 444-1', '음식점', '031-372-9971', 'https://www.diningcode.com/profile.php?rid=mob3TaDPX4Xe'),\n" +
+                "    ('해뜨는집', '경기도 오산시 한신대길 118', '한식당', '031-378-7825','https://map.naver.com/p/search/%ED%95%B4%EB%9C%A8%EB%8A%94%EC%A7%91%20%EC%98%A4%EC%82%B0/place/1850208189?c=15.00,0,0,0,dh&placePath=/home'),\n" +
+                "    ('몽상', '경기 오산시 양산로 354 1층 몽상', '음식점', '0508-8189-9706', 'https://map.naver.com/p/entry/place/1472232373?c=15.00,0,0,0,dh&placePath=/home'),\n" +
+                "    ('화락', '경기도 오산시 양산로 347', '일식 음식점', '050-71395-7131', 'https://www.google.com/maps/place/%ED%99%94%EB%9D%BD/@37.1961245,127.0235342,15z/data=!4m2!3m1!1s0x0:0x27d467efc13a244b?sa=X&ved=1t:2428&ictx=111'),\n" +
+                "    ('카페 리메인', '경기도 오산시 양산로 351', '카페', '031-374-1208', 'https://www.google.com/maps/place/%EC%B9%B4%ED%8E%98+%EB%A6%AC%EB%A9%94%EC%9D%B8/data=!3m2!1e3!4b1!4m6!3m5!1s0x357b41d9e3aa81cd:0xd811f34061b612e5!8m2!3d37.1960732!4d127.0237567!16s%2Fg%2F11syf91y6h?entry=ttu&g_ep=EgoyMDI0MDgyMS4wIKXMDSoASAFQAw%3D%3D'),\n" +
+                "    ('내가찜한닭', '경기 오산시 양산로 347', '음식점', '031-372-2356', 'https://map.naver.com/p/entry/place/35562793?c=15.00,0,0,0,dh&placePath=/home'),\n" +
+                "    ('양산골 주막', '경기도 오산시 양산동 한신대길 113', '술집', '031-377-7371', 'https://map.naver.com/p/entry/place/37131480?c=15.00,0,0,0,dh&placePath=/home'),\n" +
+                "    ('듬뿍만두샤브', '경기도 오산시 세마동 양산로 374', '음식점', '031-377-1187', 'https://map.naver.com/p/entry/place/13432346?c=15.00,0,0,0,dh'),\n" +
+                "    ('현대E마트', '경기도 오산시 양산동 379-5', '식료품점', '031-372-7743', 'https://map.naver.com/p/entry/place/17883403?c=15.00,0,0,0,dh&placePath=/home'),\n" +
+                "    ('드렁큰할매', '경기 오산시 한신대길 125 2층 드렁큰할매', '술집', '0507-1482-3307', 'https://map.naver.com/p/entry/place/1198298147?c=15.00,0,0,0,dh&placePath=/home');";
+        return sql;
+    }
+
+    public String insertBusinessHours(){
+        String sql = "INSERT INTO BusinessHours (name, day, hours) \n " +
+                "VALUES\n" +
+                "('행복한 콩박사',  '월', '11:00 - 21:00'), \n" +
+                "('행복한 콩박사',  '화', '11:00 - 21:00'), \n" +
+                "('행복한 콩박사',  '수', '11:00 - 21:00'), \n" +
+                "('행복한 콩박사',  '목', '11:00 - 21:00'), \n" +
+                "('행복한 콩박사',  '금', '11:00 - 21:00'), \n" +
+                "('행복한 콩박사',  '토', '11:00 - 21:00 \n(15:00 - 16:30 브레이크 타임)'), \n" +
+                "('행복한 콩박사',  '일', '11:00 - 21:00 \n(15:00 - 16:30 브레이크 타임)'), \n" +
+                "('해우리', '월', '11:00 - 24:00'), \n" +
+                "('해우리', '화', '11:00 - 24:00'), \n" +
+                "('해우리', '수', '11:00 - 24:00'), \n" +
+                "('해우리', '목', '11:00 - 24:00'), \n" +
+                "('해우리', '금', '11:00 - 24:00'), \n" +
+                "('해우리', '토', '휴무'), \n" +
+                "('해우리', '일', '휴무'), \n" +
+                "('태리로제떡볶이', '월', '10:55 - 23:00'), \n" +
+                "('태리로제떡볶이', '화', '10:55 - 23:00'), \n" +
+                "('태리로제떡볶이', '수', '10:55 - 23:00'), \n" +
+                "('태리로제떡볶이', '목', '10:55 - 23:00'), \n" +
+                "('태리로제떡볶이', '금', '10:55 - 23:00'), \n" +
+                "('태리로제떡볶이', '토', '10:55 - 23:00'), \n" +
+                "('태리로제떡볶이', '일', '10:55 - 23:00'), \n" +
+                "('이삭토스트', '월', '9:30 - 20:00'),\n " +
+                "('이삭토스트', '화', '9:30 - 20:00'),\n " +
+                "('이삭토스트', '수', '9:30 - 20:00'),\n " +
+                "('이삭토스트', '목', '9:30 - 20:00'),\n " +
+                "('이삭토스트', '금', '9:30 - 20:00'),\n " +
+                "('이삭토스트', '토', '10:00 - 19:00'),\n " +
+                "('이삭토스트', '일', '10:00 - 19:00'),\n " +
+                "('복고다방한신대점', '월', '9:10 - 16:00'),\n "  +
+                "('복고다방한신대점', '화', '9:10 - 16:00'),\n "  +
+                "('복고다방한신대점', '수', '9:10 - 16:00'),\n "  +
+                "('복고다방한신대점', '목', '9:10 - 16:00'),\n "  +
+                "('복고다방한신대점', '금', '9:10 - 16:00'),\n "  +
+                "('복고다방한신대점', '토', '12:00 - 16:00'),\n "  +
+                "('복고다방한신대점', '일', '12:00 - 16:00'),\n "  +
+                "('맘스터치한신대점', '월', '11:00 - 21:00'),\n "  +
+                "('맘스터치한신대점', '화', '11:00 - 21:00'),\n "  +
+                "('맘스터치한신대점', '수', '11:00 - 21:00'),\n "  +
+                "('맘스터치한신대점', '목', '11:00 - 21:00'),\n "  +
+                "('맘스터치한신대점', '금', '11:00 - 21:00'),\n "  +
+                "('맘스터치한신대점', '토', '11:00 - 21:00'),\n "  +
+                "('맘스터치한신대점', '일', '11:00 - 21:00'),\n "  +
+                "('요거프레소', '월', '11:00 - 20:00'),\n "  +
+                "('요거프레소', '화', '11:00 - 20:00'),\n "  +
+                "('요거프레소', '수', '11:00 - 20:00'),\n "  +
+                "('요거프레소', '목', '11:00 - 20:00'),\n "  +
+                "('요거프레소', '금', '11:00 - 20:00'),\n "  +
+                "('요거프레소', '토', '휴무'),\n "  +
+                "('요거프레소', '일', '11:00 - 20:00'),\n "  +
+                "('봉구스밥버거 한신대점', '월', '10:30 - 19:00'),\n "  +
+                "('봉구스밥버거 한신대점', '화', '10:30 - 19:00'),\n "  +
+                "('봉구스밥버거 한신대점', '수', '10:30 - 19:00'),\n "  +
+                "('봉구스밥버거 한신대점', '목', '10:30 - 19:00'),\n "  +
+                "('봉구스밥버거 한신대점', '금', '10:30 - 19:00'),\n "  +
+                "('봉구스밥버거 한신대점', '토', '10:30 - 19:00'),\n "  +
+                "('봉구스밥버거 한신대점', '일', '휴무'),\n "  +
+                "('나누리한신대본점', '월', '15:00 - 04:00'),\n "  +
+                "('나누리한신대본점', '화', '15:00 - 04:00'),\n "  +
+                "('나누리한신대본점', '수', '15:00 - 04:00'),\n "  +
+                "('나누리한신대본점', '목', '15:00 - 04:00'),\n "  +
+                "('나누리한신대본점', '금', '15:00 - 04:00'),\n "  +
+                "('나누리한신대본점', '토', '18:00 - 24:00'),\n "  +
+                "('나누리한신대본점', '일', '18:00 - 03:00'),\n "  +
+                "('진현가든', '월', '08:00 - 21:00'),\n "  +
+                "('진현가든', '화', '08:00 - 21:00'),\n "  +
+                "('진현가든', '수', '08:00 - 21:00'),\n "  +
+                "('진현가든', '목', '08:00 - 21:00'),\n "  +
+                "('진현가든', '금', '08:00 - 21:00'),\n "  +
+                "('진현가든', '토', '08:00 - 21:00'),\n "  +
+                "('진현가든', '일', '휴무'),\n "  +
+                "('몽상', '월', '11:00 - 21:00'),\n "  +
+                "('몽상', '화', '11:00 - 21:00'),\n "  +
+                "('몽상', '수', '11:00 - 21:00'),\n "  +
+                "('몽상', '목', '11:00 - 21:00'),\n "  +
+                "('몽상', '금', '11:00 - 21:00'),\n "  +
+                "('몽상', '토', '휴무'),\n "  +
+                "('몽상', '일', '11:30 - 21:00'),\n "  +
+                "('화락', '월', '11:00 - 23:00'),\n "  +
+                "('화락', '화', '11:00 - 23:00'),\n "  +
+                "('화락', '수', '11:00 - 23:00'),\n "  +
+                "('화락', '목', '11:00 - 23:00'),\n "  +
+                "('화락', '금', '11:00 - 23:00'),\n "  +
+                "('화락', '토', '11:00 - 23:00'),\n "  +
+                "('화락', '일', '휴무'),\n "  +
+                "('카페 리메인', '월', '10:30 - 21:00'),\n "  +
+                "('카페 리메인', '화', '10:30 - 21:00'),\n "  +
+                "('카페 리메인', '수', '10:30 - 21:00'),\n "  +
+                "('카페 리메인', '목', '10:30 - 21:00'),\n "  +
+                "('카페 리메인', '금', '10:30 - 21:00'),\n "  +
+                "('카페 리메인', '토', '10:30 - 21:00'),\n "  +
+                "('카페 리메인', '일', '10:30 - 20:00'),\n "  +
+                "('내가찜한닭', '월', '11:00 - 22:00'),\n "  +
+                "('내가찜한닭', '화', '11:00 - 22:00'),\n "  +
+                "('내가찜한닭', '수', '11:00 - 22:00'),\n "  +
+                "('내가찜한닭', '목', '11:00 - 22:00'),\n "  +
+                "('내가찜한닭', '금', '11:00 - 22:00'),\n "  +
+                "('내가찜한닭', '토', '11:00 - 22:00'),\n "  +
+                "('내가찜한닭', '일', '11:00 - 22:00'),\n "  +
+                "('듬뿍만두샤브', '월', '09:00 - 22:00'),\n "  +
+                "('듬뿍만두샤브', '화', '09:00 - 22:00'),\n "  +
+                "('듬뿍만두샤브', '수', '09:00 - 22:00'),\n "  +
+                "('듬뿍만두샤브', '목', '09:00 - 22:00'),\n "  +
+                "('듬뿍만두샤브', '금', '09:00 - 22:00'),\n "  +
+                "('듬뿍만두샤브', '토', '09:00 - 22:00'),\n "  +
+                "('듬뿍만두샤브', '일', '휴무'),\n "  +
+                "('드렁큰할매', '월', '11:00 - 25:00'),\n "  +
+                "('드렁큰할매', '화', '11:00 - 25:00'),\n "  +
+                "('드렁큰할매', '수', '11:00 - 25:00'),\n "  +
+                "('드렁큰할매', '목', '11:00 - 25:00'),\n "  +
+                "('드렁큰할매', '금', '11:00 - 25:00'),\n "  +
+                "('드렁큰할매', '토', '11:00 - 25:00'),\n "  +
+                "('드렁큰할매', '일', '17:00 - 24:00');";
         return sql;
     }
 
@@ -347,6 +508,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //                "('bus', '183', '1032', '518', '1163');";
         return sql;
     }
+
+    public String insertMascot(){
+        String ku_o = "오래전에 멸종한 종이지만<comma> 대한민국에 아직 사라지지 않은 강인한 공룡인 「쿠오」는 오랜 세월이 " +
+                "흘러도 믿음과 진보적인 끈기를 잃지 않고 성장하는 한신대학교와 많이 닮았다. " +
+                "1940년 대한민국이 혼란하던 시기에 조선신학원(한신대학교)이 어렵게 설립되면서 신학을 전하고자 하던 " +
+                "굳건한 마음과 지식을 전하고자 하는 학도들의 믿음의 씨앗이 모여 하나의 큰 일이 되었다. " +
+                "1970년대 말 오산으로 부지를 옮기며 한신대학이 종합화가 되어 또 다른 시작을 할 때 큰일에서 " +
+                "한신대학교와 똑 닮은 쿠오가 탄생했다. " +
+                "현재 한신대학교 오산캠퍼스의 모양이 쿠오와 닮아있는 것도 이 때문이라는 컨셉이다.";
+        String hangomi = "「한고미」 는 본래 한신대학교 뒷산에 홀로 살던 파란색 곰이었으나<comma> 오산캠퍼스 설립시기에 우연히 내려와 우리 학교에서 지내게 되었다. " +
+                "한신대학교 투쟁 역사와 함께하면서 몸에 열(빨간색)이 올랐는데<comma> 점점 본래의 색과 섞이며 털이 우리 학교 교색과 같은 보랏빛으로 바뀌었다.\n\n " +
+                "평소에는 무던하고 우리 학교 구성원들과 어울리는 것을 좋아하는 성격이다. 그러나 불의를 보면 묵인하지 않고 부당한 상황에 맞서는 평화 중재자의 면모를 지녔다. " +
+                "국내 토착종이자 우리 민족의 상징이라고 볼 수 있는 반달가슴곰으로<comma> 곰의 고대국어 <고마>에서 유래됐다.";
+
+        String buzzi = "「버지」는 무한한 가능성과 잠재력이 있는 한신대학교 학생들과 닮아있다. " +
+                "한신대학교의 수많은 벚나무 벚꽃 중에서도 작고 비완전체인 벚꽃 한 잎 일지라도 쿠오와 함께 자신을 탐구하고 열정적으로 꿈을 찾아 나아간다.";
+
+        String hanggu = " 「한꾸」는 한신대학교의 꿈 꾸는 아기호랑이로<comma> 무엇이든 꿈 꿀 수 있고 무엇이든 될 수 있는 한신대학교 학생을 상징한 캐릭터이다. " +
+                "백호 한꾸의 얼굴 무늬는 한신의 HS로 이루어져 있다. 한꾸는 항상 자신의 꿈을 위해 뛰어다녀 앞머리가 회오리 모양으로 고정되어 있다. " +
+                "이는 목표를 이루기 위해 고군부투하는 우리 학생들의 의지를 상징한다.\n\n " +
+                "한신대학교의 꿈 꾸는 아기호랑이 한꾸는 정직하고 상냥한 성격을 가졌으며 누구를 만나도 먼저 인사하는 인기인이다. " +
+                "용맹한 호랑이로 도전을 두려워하지 않으며 모든 활동을 경험하고 싶어해 항상 바쁘게 뛰어다니기 때문에 앞머리는 항상 바람 모양으로 돌돌 말려있다. " +
+                "도전을 두려워하는 친구를 만날 때마다 항상 성과가 어떻든 한 번 해보라는 말을 해주며 도전을 두려워하지 않는 한꾸가 도전자체가 값전 것이라는 메시지를 전달한다.";
+
+        String sql = "INSERT INTO Mascot (name, gender, hobby, specialty, dislike, birthBackground, source) VALUES\n" +
+                "('쿠오 (KU-O)', '?', '순찰하기<comma> 새로운 길 탐색하기<comma> 퍼즐 맞추기', '발차기', '대충', '" + ku_o + "', '쿠오와 버지'), \n" +
+                "('한고미 (HANGOMI)', '?', '학교 앞 맛집 탐방<comma> 한신공원 산책', '교수님과 학생들의 소통창구 되어주기', '?', '" + hangomi + "', '한고미'), \n" +
+                "('버지 (BUZZI)', '?', '독서', '철학<comma> 경제<comma> 그림<comma> 컴퓨터<comma> 외국어<comma> 체육', '송충이', '"+ buzzi + "', '쿠오와 버지'), \n" +
+                "('한꾸 (HANGGU)', '?', '?', '?', '?', '" + hanggu + "', '한꾸');";
+
+        return sql;
+    }
+
     public String insertCallNumbers() {
         String sql = "INSERT INTO CallNumbers (affiliation, sub_affiliation, name, CallNumber, office_number) VALUES\n" +
                 "('한신대학교','총장','강성영','031-379-0001','1201'),\n" +

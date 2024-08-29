@@ -8,7 +8,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ExpandableListView;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 
@@ -21,11 +24,18 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.summerproject2024.Calendar.Calendar_fragment;
 import com.example.summerproject2024.Campus_map.Campus_map;
+import com.example.summerproject2024.DB.DatabaseHelper;
+import com.example.summerproject2024.Mascot.Mascot;
+import com.example.summerproject2024.Menu.MenuAdapter;
+import com.example.summerproject2024.Menu.MenuGroup;
+import com.example.summerproject2024.Menu.MenuLinkAdapter;
+import com.example.summerproject2024.Menu.MenuLinkGroup;
 import com.example.summerproject2024.Number.University_Number;
 import com.example.summerproject2024.Information.University_Town_Info;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -41,12 +51,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     University_Number university_number;
     University_Town_Info university_town_info;
     Calendar_fragment calendar_fragment;
+    Mascot mascot_fragment;
 
     //Buttons
     ImageButton menu_button;
 
     //Menu
     NavigationView navigationView;
+    ExpandableListView menuList;
+    ListView menuLinkList;
+
+    //Menu Link
+    HashMap<String, String> linkMap;
+    ArrayList<MenuGroup> menuGroup;
+    ArrayList<MenuLinkGroup> linkGroups;
 
     //Toolbar
     Toolbar toolbar;
@@ -65,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         university_number = new University_Number();
         university_town_info = new University_Town_Info();
         calendar_fragment = new Calendar_fragment();
+        mascot_fragment = new Mascot();
 
         //Change Fragment
         fragmentManager = getSupportFragmentManager();
@@ -89,77 +108,167 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Menu
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        settingMenu();
+        settingMenuLink();
 
         //Toolbar
         toolbar = findViewById(R.id.toolbar);
         page_title = toolbar.findViewById(R.id.page_title);
+
+        DatabaseHelper db = new DatabaseHelper(this);
+
     }
 
-    //ItemEvent
+
+
+    //Menu-item
+    private void settingMenu() {
+        menuList = (ExpandableListView) findViewById(R.id.menuList);
+
+        //Campus_map
+        menuGroup = new ArrayList<>();
+        MenuGroup item = new MenuGroup(getResources().getString(R.string.map_page));
+        menuGroup.add(item);
+
+        //schedule
+        item = new MenuGroup(getResources().getString(R.string.schedule_page));
+        menuGroup.add(item);
+
+        //Number
+        item = new MenuGroup(getResources().getString(R.string.num_page));
+        item.child.add(getResources().getString(R.string.uni_number));
+        item.child.add(getResources().getString(R.string.prof_number));
+        menuGroup.add(item);
+
+        //Town Info
+        item = new MenuGroup(getResources().getString(R.string.town_page));
+        menuGroup.add(item);
+
+        //Mascot
+        item = new MenuGroup(getResources().getString(R.string.mascot_page));
+        item.child.add(getResources().getString(R.string.mascot_cu_o));
+        item.child.add(getResources().getString(R.string.mascot_hangomi));
+        item.child.add(getResources().getString(R.string.mascot_buzzi));
+        item.child.add(getResources().getString(R.string.mascot_hanggu));
+        menuGroup.add(item);
+
+        MenuAdapter adapter = new MenuAdapter(getApplicationContext(), R.layout.group_row, R.layout.child_row, menuGroup);
+        menuList.setGroupIndicator(null);
+        menuList.setAdapter(adapter);
+
+        menuList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                String groupName = menuGroup.get(groupPosition).groupName;
+
+                if(groupName.equals(getResources().getString(R.string.map_page))){
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    page_title.setText(groupName);
+                    transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.fragment_container_view, campus_map).commitAllowingStateLoss();
+                    closeMenu(-1);
+                    return true;
+                }
+
+                if(groupName.equals(getResources().getString(R.string.schedule_page))){
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    page_title.setText(groupName);
+                    transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.fragment_container_view, calendar_fragment).commitAllowingStateLoss();
+                    closeMenu(-1);
+                    return true;
+                }
+
+                if(groupName.equals(getResources().getString(R.string.town_page))){
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    page_title.setText(groupName);
+                    transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.fragment_container_view, university_town_info).commitAllowingStateLoss();
+                    closeMenu(-1);
+                    return true;
+                }
+
+                return false;
+            }
+        });
+
+        menuList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+
+                drawerLayout.closeDrawer(GravityCompat.START);
+                transaction = fragmentManager.beginTransaction();
+                String child = menuGroup.get(groupPosition).child.get(childPosition);
+                Bundle bundle = new Bundle();
+
+                if(menuGroup.get(groupPosition).groupName.equals(getResources().getString(R.string.num_page))){
+                    page_title.setText(child);
+                    bundle.putString("number_kind", child);
+                    university_number.setArguments(bundle);
+                    transaction.replace(R.id.fragment_container_view, university_number).commitAllowingStateLoss();
+                    closeMenu(groupPosition);
+                    return true;
+                }
+
+                if(menuGroup.get(groupPosition).groupName.equals(getResources().getString(R.string.mascot_page))){
+                    page_title.setText(child);
+                    if(mascot_fragment.isVisible()){
+                        mascot_fragment.SettingPage(child);
+                    }
+                    else{
+                        bundle.putString("mascot_name", child);
+                        mascot_fragment.setArguments(bundle);
+                        transaction.replace(R.id.fragment_container_view, mascot_fragment).commitAllowingStateLoss();
+                    }
+                    closeMenu(groupPosition);
+                    return true;
+                }
+
+                return false;
+            }
+        });
+    }
+
+    public void closeMenu(int index){
+        for(int i = 0; i < menuGroup.size(); i++){
+            if(!menuGroup.get(i).child.isEmpty() && i != index){
+                menuList.collapseGroup(i);
+            }
+        }
+    }
+
+    //menu-link
+    private void settingMenuLink() {
+        menuLinkList = (ListView) findViewById(R.id.menuLinkList);
+
+        linkMap = new HashMap<>();
+        linkMap.put(getResources().getString(R.string.homepage), "https://hs.ac.kr/sites/kor/index.do");
+        linkMap.put(getResources().getString(R.string.lms), "https://lms.hs.ac.kr/main/MainView.dunet#main");
+        linkMap.put(getResources().getString(R.string.hsctis), "https://hsctis.hs.ac.kr/app-nexa/index.html");
+        linkMap.put(getResources().getString(R.string.attend), "https://attend.hs.ac.kr/#");
+        linkMap.put(getResources().getString(R.string.sugang), "https://sugang.hs.ac.kr/login");
+
+        linkGroups = new ArrayList<>();
+        for(String key : linkMap.keySet()){
+            linkGroups.add(new MenuLinkGroup(key));
+        }
+
+        MenuLinkAdapter menuLinkAdapter = new MenuLinkAdapter(this, linkGroups);
+        menuLinkList.setAdapter(menuLinkAdapter);
+
+        menuLinkList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(linkMap.get(menuLinkAdapter.getItem(position).link)));
+                startActivity(intent);
+            }
+        });
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
-        drawerLayout.closeDrawer(GravityCompat.START);
-        //Change fragment
-        if(menuItem.getItemId() == R.id.menu_map){
-            Log.v("menu", "map");
-            page_title.setText(getResources().getString(R.string.map_page));
-            transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.fragment_container_view, campus_map).commitAllowingStateLoss();
-            return true;
-        }
-        if(menuItem.getItemId() == R.id.menu_schedule){
-            Log.v("menu", "schedule");
-            page_title.setText(getResources().getString(R.string.schedule_page));
-            transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.fragment_container_view, calendar_fragment).commitAllowingStateLoss();
-            return true;
-        }
-        if(menuItem.getItemId() == R.id.menu_university_number){
-            Log.v("menu", "number");
-            page_title.setText(getResources().getString(R.string.num_page));
-            transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.fragment_container_view, university_number).commitAllowingStateLoss();
-            return true;
-        }
-        if(menuItem.getItemId() == R.id.menu_town_info){
-            Log.v("menu", "town_info");
-            page_title.setText(getResources().getString(R.string.town_page));
-            transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.fragment_container_view, university_town_info).commitAllowingStateLoss();
-            return true;
-        }
-
-
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-
-        //Link
-        if(menuItem.getItemId() == R.id.menu_homepage){
-            intent.setData(Uri.parse("https://hs.ac.kr/sites/kor/index.do"));
-            startActivity(intent);
-            return true;
-        }
-        if(menuItem.getItemId() == R.id.menu_lms){
-            intent.setData(Uri.parse("https://lms.hs.ac.kr/main/MainView.dunet#main"));
-            startActivity(intent);
-            return true;
-        }
-        if(menuItem.getItemId() == R.id.menu_hsctis){
-            intent.setData(Uri.parse("https://hsctis.hs.ac.kr/app-nexa/index.html"));
-            startActivity(intent);
-            return true;
-        }
-        if(menuItem.getItemId() == R.id.menu_attend){
-            intent.setData(Uri.parse("https://attend.hs.ac.kr/#"));
-            startActivity(intent);
-            return true;
-        }
-        if(menuItem.getItemId() == R.id.menu_sugang){
-            intent.setData(Uri.parse("https://sugang.hs.ac.kr/login"));
-            startActivity(intent);
-            return true;
-        }
-
         return false;
     }
 }

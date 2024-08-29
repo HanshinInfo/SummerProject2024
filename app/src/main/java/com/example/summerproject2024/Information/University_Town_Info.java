@@ -55,3 +55,4 @@ public class University_Town_Info extends Fragment {
     }
 
 }
+
