@@ -9,6 +9,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static String dbName = "Android.db";
@@ -178,6 +179,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         return hours;
+    }
+
+
+    public HashMap<String, String> selectHours(String townName) {
+        String sql = "SELECT * FROM BusinessHours WHERE name = '" + townName + "';";
+
+        HashMap<String, String> hoursMap = new HashMap<String, String>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+
+        while(cursor.moveToNext()){
+            hoursMap.put(cursor.getString(1), cursor.getString(2));            ;
+        }
+
+        return hoursMap;
     }
 
     public ArrayList<String>[] selectBusinessZoneUsingName(String name){
