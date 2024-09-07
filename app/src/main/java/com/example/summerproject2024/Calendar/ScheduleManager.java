@@ -89,8 +89,6 @@ public class ScheduleManager {
 
     // 다이얼로그를 통해 일정 추가
     public void showAddScheduleDialog() {
-//        String selectedDate = getSelectedDate();
-
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Add Schedule for " + selectedDate);
 
@@ -110,8 +108,6 @@ public class ScheduleManager {
 
     // 다이얼로그를 통해 일정 삭제
     public void showDeleteScheduleDialog() {
-//        String selectedDate = getSelectedDate();
-
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Delete Schedule for " + selectedDate);
 
