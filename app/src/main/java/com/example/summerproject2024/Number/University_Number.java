@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,7 +18,7 @@ import com.example.summerproject2024.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class University_Number extends Fragment{
+public class University_Number extends Fragment {
     public DatabaseHelper call_DB;
     ArrayList<String>[] num_Info;
     ArrayList<String>[] pro_Info;
@@ -42,7 +43,7 @@ public class University_Number extends Fragment{
             }
             ind+=1;
         }
-        for(int i=0; i<=pro_Info.length; i++){
+        /*for(int i=0; i<=pro_Info.length; i++){
             itemList.add(new ArrayList<String>());
         }
         for (int i = 0; i < pro_Info.length; i++) {
@@ -50,15 +51,8 @@ public class University_Number extends Fragment{
                 itemList.get(ind).add(pro_Info[i].get(j));
             }
             ind+=1;
-        }
+        }*/
         NumberView_adapter adapter = new NumberView_adapter(itemList);
-
-        adapter.setOnItemClickListener(new NumberView_adapter.OnItemClickListener() {
-            @Override
-            public void onItemClicked(int position, String data) {
-
-            }
-        });
         recyclerView.setAdapter(adapter);
         return view;
     }

@@ -1,10 +1,13 @@
 package com.example.summerproject2024.Number;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.summerproject2024.R;
@@ -16,7 +19,6 @@ public class NumberView_adapter extends RecyclerView.Adapter<NumberView_adapter.
     private List<List<String>> itemList;
     private String[] mData;
     private LayoutInflater mInflater;
-    private ItemClickListener mClickListener;
     public NumberView_adapter(List<List<String>> itemList) {
         this.itemList = itemList;
     }
@@ -51,30 +53,32 @@ public class NumberView_adapter extends RecyclerView.Adapter<NumberView_adapter.
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.number_view_item, parent, false);
-        NumberView_adapter.ViewHolder viewHolder = new NumberView_adapter.ViewHolder(view);
-
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String data = "";
-                int position = viewHolder.getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    data = viewHolder.getTextView().getText().toString();
-                }
-                itemClickListener.onItemClicked(position, data);
-            }
-        });
 
         return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        //holder.textView.setText(itemList.get(position));
-        holder.aff.setText(itemList.get(position).get(0));
-        holder.subaff.setText(itemList.get(position).get(1));
-        holder.name.setText(itemList.get(position).get(2));
+        holder.setItem(itemList.get(position).get(0),itemList.get(position).get(1),itemList.get(position).get(2));
+        holder.card_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int mPosition = holder.getAdapterPosition();
+
+                Context context = v.getContext();
+
+                Intent detailNum = new Intent(context, University_Num_detail.class);
+                detailNum.putExtra("aff", itemList.get(mPosition).get(0));
+                detailNum.putExtra("subaff", itemList.get(mPosition).get(1));
+                detailNum.putExtra("name", itemList.get(mPosition).get(2));
+                detailNum.putExtra("number", itemList.get(mPosition).get(3));
+                detailNum.putExtra("office", itemList.get(mPosition).get(4));
+
+            }
+        });
+
     }
 
     @Override
@@ -82,32 +86,25 @@ public class NumberView_adapter extends RecyclerView.Adapter<NumberView_adapter.
         return itemList.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class MyViewHolder extends RecyclerView.ViewHolder{
         TextView textView;
         TextView aff;
         TextView subaff;
         TextView name;
-        MyViewHolder(View itemView) {
+        CardView card_view;
+        public MyViewHolder(View itemView) {
             super(itemView);
-            //textView = itemView.findViewById(R.id.NumberTextView);
+
             aff = itemView.findViewById(R.id.aff);
             subaff = itemView.findViewById(R.id.subaff);
             name = itemView.findViewById(R.id.name);
-            itemView.setOnClickListener(this);
+            card_view = itemView.findViewById(R.id.layout_container);
         }
-        @Override
-        public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+        public void setItem(String aff, String subaff, String name){
+            this.aff.setText(aff);
+            this.subaff.setText(subaff);
+            this.name.setText(name);
         }
-    }
-    String getItem(int id)
-    {  return mData[id];   }
-
-    void setClickListener(ItemClickListener itemClickListener) {
-        this.mClickListener = itemClickListener;
     }
 
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
-    }
 }
