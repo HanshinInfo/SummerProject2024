@@ -80,6 +80,9 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
             int previousSelectedPosition = selectedPosition;
             selectedPosition = holder.getAdapterPosition(); // 현재 위치 가져오기
 
+            // ScheduleManager에 선택된 날짜 전달
+            scheduleManager.setSelectedDate(getYear(), currentMonth + 1, day);
+
             // 이전에 선택된 아이템 업데이트
             if (previousSelectedPosition != -1) {
                 notifyItemChanged(previousSelectedPosition);
@@ -87,10 +90,6 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
 
             // 새로 선택된 아이템 업데이트
             notifyItemChanged(selectedPosition);
-
-//            // 선택된 날짜의 일정을 관리하기 위한 다이얼로그 표시
-//            String date = String.format("%d-%02d-%02d", getYear(), currentMonth + 1, day);
-//            showScheduleDialog(date);
         });
     }
 
@@ -108,26 +107,6 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
     private int getYear() {
         return Calendar.getInstance().get(Calendar.YEAR);
     }
-
-//    private void showScheduleDialog(String date) {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//        builder.setTitle("Schedule Options");
-//
-//        String[] options = {"Add Schedule", "Delete Schedule"};
-//        builder.setItems(options, (dialog, which) -> {
-//            switch (which) {
-//                case 0:
-//                    scheduleManager.showAddScheduleDialog(date);
-//                    break;
-//                case 1:
-//                    scheduleManager.showDeleteScheduleDialog(date);
-//                    break;
-//            }
-//        });
-//
-//        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
-//        builder.show();
-//    }
 
     public static class CalendarViewHolder extends RecyclerView.ViewHolder {
         TextView dayText;

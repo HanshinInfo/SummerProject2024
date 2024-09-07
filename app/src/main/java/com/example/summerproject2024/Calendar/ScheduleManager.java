@@ -19,20 +19,31 @@ import java.util.List;
 public class ScheduleManager {
     private final Context context;
     private final List<Schedule> schedules;
-    private final Calendar currentCalendar;
+    private String selectedDate;
 
-    public ScheduleManager(Context context, Calendar currentCalendar) {
+    public ScheduleManager(Context context) {
         this.context = context;
-        this.currentCalendar = currentCalendar;
+        this.selectedDate = getCurrentDate();
         this.schedules = loadSchedulesFromFile();
     }
 
-    // 현재 선택된 날짜를 포맷팅하여 반환
-    private String getSelectedDate() {
+    // 현재 날짜를 반환하는 메서드 (초기화 시 사용)
+    private String getCurrentDate() {
+        Calendar currentCalendar = Calendar.getInstance();
         int year = currentCalendar.get(Calendar.YEAR);
         int month = currentCalendar.get(Calendar.MONTH) + 1; // 월은 0부터 시작하므로 +1
         int day = currentCalendar.get(Calendar.DAY_OF_MONTH);
         return String.format("%d-%02d-%02d", year, month, day);
+    }
+
+    // 선택된 날짜를 설정하는 메서드
+    public void setSelectedDate(int year, int month, int day) {
+        this.selectedDate = String.format("%d-%02d-%02d", year, month, day);
+    }
+
+    // 선택된 날짜를 반환하는 메서드
+    public String getSelectedDate() {
+        return this.selectedDate;
     }
 
     // 일정을 파일에 저장
@@ -78,10 +89,10 @@ public class ScheduleManager {
 
     // 다이얼로그를 통해 일정 추가
     public void showAddScheduleDialog() {
-        String selectedDate = getSelectedDate();
+//        String selectedDate = getSelectedDate();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Add Schedule");
+        builder.setTitle("Add Schedule for " + selectedDate);
 
         final EditText input = new EditText(context);
         builder.setView(input);
@@ -99,10 +110,10 @@ public class ScheduleManager {
 
     // 다이얼로그를 통해 일정 삭제
     public void showDeleteScheduleDialog() {
-        String selectedDate = getSelectedDate();
+//        String selectedDate = getSelectedDate();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Delete Schedule");
+        builder.setTitle("Delete Schedule for " + selectedDate);
 
         List<String> matchingSchedules = new ArrayList<>();
         for (Schedule schedule : schedules) {
