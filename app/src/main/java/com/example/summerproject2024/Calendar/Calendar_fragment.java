@@ -48,6 +48,10 @@ public class Calendar_fragment extends Fragment {
         view.findViewById(R.id.prevMonthButton).setOnClickListener(v -> CalendarUtils.moveToPreviousMonth(currentCalendar, adapter, monthText));
         view.findViewById(R.id.nextMonthButton).setOnClickListener(v -> CalendarUtils.moveToNextMonth(currentCalendar, adapter, monthText));
 
+        // 일정 추가 버튼 클릭 리스너를 ScheduleManager를 통해 설정
+        scheduleManager.setAddScheduleButtonListener(view.findViewById(R.id.addScheduleButton));
+        scheduleManager.setDeleteScheduleButtonListener(view.findViewById(R.id.deleteScheduleButton));
+
         return view;
     }
 }

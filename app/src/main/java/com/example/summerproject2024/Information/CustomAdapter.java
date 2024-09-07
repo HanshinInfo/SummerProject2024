@@ -10,14 +10,15 @@ import android.widget.TextView;
 
 import com.example.summerproject2024.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CustomAdapter extends BaseAdapter {
 
     private Context context;
-    private List<Item> items;
+    private ArrayList<Item> items;
 
-    public CustomAdapter(Context context, List<Item> items) {
+    public CustomAdapter(Context context, ArrayList<Item> items) {
         this.context = context;
         this.items = items;
     }
@@ -29,7 +30,7 @@ public class CustomAdapter extends BaseAdapter {
 
 
     @Override
-    public Object getItem(int position) {
+    public Item getItem(int position) {
         return items.get(position);
     }
 
@@ -37,6 +38,8 @@ public class CustomAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
+
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

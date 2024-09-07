@@ -9,10 +9,11 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static String dbName = "Android.db";
-    public static int version = 31;
+    public static int version = 34;
 
     public DatabaseHelper(@Nullable Context context) {
 
@@ -141,11 +142,59 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return categoryList;
     }
 
-    public ArrayList<String>[] selectBusinessZone(String day){
-        String sql = "SELECT BusinessZone.name, category, hours " +
-                "FROM BusinessZone, BusinessHours " +
-                "WHERE BusinessZone.name = BusinessHours.name AND day = '" + day + "';";
+    public ArrayList<String>[] selectBusinessZone(){
+        String sql = "SELECT name, category FROM BusinessZone;";
         return selectTable(sql);
+    }
+
+
+    public ArrayList<String> selectTownInfo(String name) {
+        ArrayList<String> list = new ArrayList<String>();
+        String sql = "SELECT location, number, link FROM BusinessZone WHERE name = '" + name + "'; ";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+
+        while(cursor.moveToNext()){
+            for(int i = 0; i < cursor.getColumnCount(); i++){
+                list.add(cursor.getString(i));
+            }
+        }
+
+        return list;
+    }
+
+    public String selectBusinessHours(String name, String day){
+        String hours = "정보 없음";
+
+        String sql = "SELECT hours " +
+                "FROM BusinessHours " +
+                "WHERE name = '" + name + "' AND day = '" + day + "';";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+
+        while(cursor.moveToNext()){
+            hours = day + " " + cursor.getString(0);
+        }
+
+        return hours;
+    }
+
+
+    public HashMap<String, String> selectHours(String townName) {
+        String sql = "SELECT * FROM BusinessHours WHERE name = '" + townName + "';";
+
+        HashMap<String, String> hoursMap = new HashMap<String, String>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+
+        while(cursor.moveToNext()){
+            hoursMap.put(cursor.getString(1), cursor.getString(2));            ;
+        }
+
+        return hoursMap;
     }
 
     public ArrayList<String>[] selectBusinessZoneUsingName(String name){
@@ -192,6 +241,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public String deleteTable(){
         String sql = "DROP TABLE IF EXISTS BusinessZone;\n" +
+                "DROP TABLE IF EXISTS BusinessHours;\n" +
                 "DROP TABLE IF EXISTS CallNumbers;\n" +
                 "DROP TABLE IF EXISTS ProfessorCallNumbers;\n" +
                 "DROP TABLE IF EXISTS Amenity;\n" +
