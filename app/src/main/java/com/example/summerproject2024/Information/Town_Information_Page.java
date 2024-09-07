@@ -1,11 +1,11 @@
 package com.example.summerproject2024.Information;
 
-import android.graphics.drawable.Drawable;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,7 +18,6 @@ import com.example.summerproject2024.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class Town_Information_Page extends Fragment {
 
@@ -32,14 +31,16 @@ public class Town_Information_Page extends Fragment {
     String link;
 
     HashMap<String, Integer> imageMap;
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.town_info_detail_page, container, false);
 
-        image = (ImageView) view.findViewById(R.id.image);
-        name = (TextView) view.findViewById(R.id.name);
-        location = (TextView) view.findViewById(R.id.location);
-        hours = (TextView) view.findViewById(R.id.hours);
-        number = (TextView) view.findViewById(R.id.number);
+        image = view.findViewById(R.id.image);
+        name = view.findViewById(R.id.name);
+        location = view.findViewById(R.id.location);
+        hours = view.findViewById(R.id.hours);
+        number = view.findViewById(R.id.number);
 
         townDB = new DatabaseHelper(getContext());
 
@@ -47,21 +48,20 @@ public class Town_Information_Page extends Fragment {
 
         ArrayList<String> data = townDB.selectTownInfo(townName);
 
-        imageMap = new HashMap<String, Integer>();
+        imageMap = new HashMap<>();
         createImageMap();
 
         String hour = "";
         HashMap<String, String> hoursMap = townDB.selectHours(townName);
         String[] days = {"월", "화", "수", "목", "금", "토", "일"};
 
-        if(hoursMap.isEmpty()){
+        if (hoursMap.isEmpty()) {
             hour = "정보 없음";
-        }
-        else {
-            for(int i = 0; i < days.length - 1; i++){
+        } else {
+            for (int i = 0; i < days.length - 1; i++) {
                 hour += days[i] + hoursMap.get(days[i]) + "\n";
             }
-            hour += days[days.length-1] + hoursMap.get(days[days.length-1]);
+            hour += days[days.length - 1] + hoursMap.get(days[days.length - 1]);
         }
 
         image.setImageResource(imageMap.get(townName));
@@ -70,6 +70,15 @@ public class Town_Information_Page extends Fragment {
         hours.setText(hour);
         number.setText(data.get(1));
         link = data.get(2);
+
+        // location(주소) 클릭 시 link로 이동
+        location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+                startActivity(browserIntent);
+            }
+        });
 
         return view;
     }

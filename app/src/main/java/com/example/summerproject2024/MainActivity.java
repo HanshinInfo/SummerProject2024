@@ -3,9 +3,6 @@ package com.example.summerproject2024;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,10 +10,10 @@ import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import androidx.appcompat.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
@@ -25,13 +22,13 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.summerproject2024.Calendar.Calendar_fragment;
 import com.example.summerproject2024.Campus_map.Campus_map;
 import com.example.summerproject2024.DB.DatabaseHelper;
+import com.example.summerproject2024.Information.University_Town_Info;
 import com.example.summerproject2024.Mascot.Mascot;
 import com.example.summerproject2024.Menu.MenuAdapter;
 import com.example.summerproject2024.Menu.MenuGroup;
 import com.example.summerproject2024.Menu.MenuLinkAdapter;
 import com.example.summerproject2024.Menu.MenuLinkGroup;
 import com.example.summerproject2024.Number.University_Number;
-import com.example.summerproject2024.Information.University_Town_Info;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -75,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         drawerLayout = (DrawerLayout) findViewById(R.id.main);
         menu_button = (ImageButton) findViewById(R.id.menu_button);
 
@@ -89,6 +87,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fragment_container_view, campus_map).commitAllowingStateLoss();
+
+
+
+
 
         //MenuBtn
         menu_button.setOnClickListener(new View.OnClickListener() {
@@ -118,6 +120,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DatabaseHelper db = new DatabaseHelper(this);
 
     }
+
+
 
 
 
@@ -223,7 +227,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     closeMenu(groupPosition);
                     return true;
                 }
-
                 return false;
             }
         });

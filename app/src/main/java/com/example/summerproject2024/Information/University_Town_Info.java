@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 public class University_Town_Info extends Fragment {
 
@@ -70,6 +69,7 @@ public class University_Town_Info extends Fragment {
         CustomAdapter adapter = new CustomAdapter(getContext(), items);
         list.setAdapter(adapter);
 
+
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -84,7 +84,9 @@ public class University_Town_Info extends Fragment {
         return view;
     }
 
-    private int getCurrentDay() {
+
+
+        private int getCurrentDay() {
         Date currentDate = new Date();
 
         Calendar calendar = Calendar.getInstance();
