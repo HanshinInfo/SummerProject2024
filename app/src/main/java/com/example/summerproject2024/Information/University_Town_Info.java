@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.summerproject2024.Campus_map.Campus_map_dialog;
 import com.example.summerproject2024.DB.DatabaseHelper;
 import com.example.summerproject2024.R;
 
@@ -26,8 +27,6 @@ public class University_Town_Info extends Fragment {
     //FragmentManager
     private static FragmentManager fragmentManager;
     private static FragmentTransaction transaction;
-
-    private Town_Information_Page townInformationPage;
 
     private ListView list;
     private DatabaseHelper townDB;
@@ -45,8 +44,6 @@ public class University_Town_Info extends Fragment {
         list = view.findViewById(R.id.list);
 
         day = getCurrentDay();
-
-        townInformationPage = new Town_Information_Page();
         townDB = new DatabaseHelper(getContext());
         town_Info = townDB.selectBusinessZone();
 
@@ -73,11 +70,10 @@ public class University_Town_Info extends Fragment {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                Bundle bundle = new Bundle();
-                bundle.putString("townName", adapter.getItem(i).getName());
-                townInformationPage.setArguments(bundle);
-                transaction.replace(R.id.fragment_container_view, townInformationPage).commitAllowingStateLoss();
+                Town_Info_Dialog townInfoDialog = new Town_Info_Dialog(getContext());
+                townInfoDialog.townName = adapter.getItem(i).getName();
+
+                townInfoDialog.show();
             }
         });
 

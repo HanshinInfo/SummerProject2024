@@ -60,7 +60,7 @@ public class Campus_map_dialog extends Dialog {
         buildingHash.put("6", R.drawable.building_06);
         buildingHash.put("7", 0);
         buildingHash.put("8", R.drawable.building_08);
-        buildingHash.put("9", 0);
+        buildingHash.put("9", R.drawable.building_09);
         buildingHash.put("10", R.drawable.building_10);
         buildingHash.put("11", R.drawable.building_11);
         buildingHash.put("14", R.drawable.building_14);

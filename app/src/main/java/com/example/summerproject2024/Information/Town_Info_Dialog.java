@@ -1,17 +1,18 @@
 package com.example.summerproject2024.Information;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.net.Uri;
-import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.example.summerproject2024.DB.DatabaseHelper;
 import com.example.summerproject2024.R;
@@ -19,37 +20,60 @@ import com.example.summerproject2024.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Town_Information_Page extends Fragment {
+public class Town_Info_Dialog extends Dialog {
 
     private DatabaseHelper townDB;
 
+    String townName;
     ImageView image;
     TextView name;
     TextView location;
     TextView hours;
     TextView number;
     String link;
+    ArrayList<String> data;
 
     HashMap<String, Integer> imageMap;
 
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.town_info_detail_page, container, false);
+    public Town_Info_Dialog(@NonNull Context context) {
+        super(context);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.town_info_detail_page);
 
-        image = view.findViewById(R.id.image);
-        name = view.findViewById(R.id.name);
-        location = view.findViewById(R.id.location);
-        hours = view.findViewById(R.id.hours);
-        number = view.findViewById(R.id.number);
+        image = findViewById(R.id.image);
+        name = findViewById(R.id.name);
+        location = findViewById(R.id.location);
+        hours = findViewById(R.id.hours);
+        number = findViewById(R.id.number);
 
         townDB = new DatabaseHelper(getContext());
 
-        String townName = this.getArguments().getString("townName");
-
-        ArrayList<String> data = townDB.selectTownInfo(townName);
-
         imageMap = new HashMap<>();
         createImageMap();
+
+        // location(주소) 클릭 시 link로 이동
+        location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+                Town_Info_Dialog.this.getContext().startActivity(browserIntent);
+            }
+        });
+
+        number.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent numberIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + data.get(1)));
+                Town_Info_Dialog.this.getContext().startActivity(numberIntent);
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        data = townDB.selectTownInfo(townName);
 
         String hour = "";
         HashMap<String, String> hoursMap = townDB.selectHours(townName);
@@ -61,26 +85,21 @@ public class Town_Information_Page extends Fragment {
             for (int i = 0; i < days.length - 1; i++) {
                 hour += days[i] + hoursMap.get(days[i]) + "\n";
             }
-            hour += days[days.length - 1] + hoursMap.get(days[days.length - 1]);
+            hour += days[days.length - 1] + " " + hoursMap.get(days[days.length - 1]);
         }
 
         image.setImageResource(imageMap.get(townName));
         name.setText(townName);
-        location.setText(data.get(0));
         hours.setText(hour);
         number.setText(data.get(1));
         link = data.get(2);
 
-        // location(주소) 클릭 시 link로 이동
-        location.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
-                startActivity(browserIntent);
-            }
-        });
+        SpannableString content = new SpannableString(data.get(0));
+        content.setSpan(new UnderlineSpan(), 0, data.get(0).length(), 0);
+        location.setText(content);
 
-        return view;
+        content.setSpan(new UnderlineSpan(), 0, data.get(1).length(), 0);
+        number.setText(content);
     }
 
     private void createImageMap() {

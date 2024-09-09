@@ -76,11 +76,6 @@ public class Campus_map extends Fragment {
             }
         });
 
-
-
         return view;
     }
-
-
-
 }
