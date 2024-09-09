@@ -83,7 +83,7 @@ public class Town_Info_Dialog extends Dialog {
             hour = "정보 없음";
         } else {
             for (int i = 0; i < days.length - 1; i++) {
-                hour += days[i] + hoursMap.get(days[i]) + "\n";
+                hour += days[i] + " " + hoursMap.get(days[i]) + "\n";
             }
             hour += days[days.length - 1] + " " + hoursMap.get(days[days.length - 1]);
         }
