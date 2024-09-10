@@ -207,9 +207,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 if(menuGroup.get(groupPosition).groupName.equals(getResources().getString(R.string.num_page))){
                     page_title.setText(child);
-                    bundle.putString("number_kind", child);
-                    university_number.setArguments(bundle);
-                    transaction.replace(R.id.fragment_container_view, university_number).commitAllowingStateLoss();
+                    if(university_number.isVisible()){
+//                        mascot_fragment.SettingPage(child);
+                    }
+                    else{
+                        bundle.putString("number_kind", child);
+                        university_number.setArguments(bundle);
+                        transaction.replace(R.id.fragment_container_view, university_number).commitAllowingStateLoss();
+                    }
                     closeMenu(groupPosition);
                     return true;
                 }
