@@ -22,16 +22,26 @@ public class University_Number extends Fragment {
     public DatabaseHelper call_DB;
     ArrayList<String>[] num_Info;
     ArrayList<String>[] pro_Info;
+    List<List<String>> itemList;
+    RecyclerView recyclerView;
+    NumberView_adapter num_adapter;
+    ProView_adaptor pro_adapter;
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.university_number_fragment, container, false);
-        call_DB = new DatabaseHelper(getContext());
-        num_Info = call_DB.selectCallNumbersAll();
-        pro_Info = call_DB.selectProfessorAll();
-
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.rview);
+        recyclerView = (RecyclerView) view.findViewById(R.id.rview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        call_DB = new DatabaseHelper(getContext());
 
-        List<List<String>> itemList = new ArrayList<>();
+        //1
+        callNumInfo();
+        //
+        //callProfessorInfo();
+        return view;
+    }
+    private void callNumInfo(){
+        num_Info = call_DB.selectCallNumbersAll();
+
+        itemList = new ArrayList<>();
         int ind = 0;
         for(int i=0; i<=num_Info.length; i++){
             itemList.add(new ArrayList<String>());
@@ -43,7 +53,17 @@ public class University_Number extends Fragment {
             }
             ind+=1;
         }
-        /*for(int i=0; i<=pro_Info.length; i++){
+        num_adapter = new NumberView_adapter(itemList);
+        recyclerView.setAdapter(num_adapter);
+    }
+
+    private void callProfessorInfo(){
+        pro_Info = call_DB.selectProfessorAll();
+
+        List<List<String>> itemList = new ArrayList<>();
+        int ind = 0;
+
+        for(int i=0; i<=pro_Info.length; i++){
             itemList.add(new ArrayList<String>());
         }
         for (int i = 0; i < pro_Info.length; i++) {
@@ -51,10 +71,9 @@ public class University_Number extends Fragment {
                 itemList.get(ind).add(pro_Info[i].get(j));
             }
             ind+=1;
-        }*/
-        NumberView_adapter adapter = new NumberView_adapter(itemList);
-        recyclerView.setAdapter(adapter);
-        return view;
+        }
+        pro_adapter = new ProView_adaptor(itemList);
+        recyclerView.setAdapter(pro_adapter);
     }
     private void showDialog(){
 
