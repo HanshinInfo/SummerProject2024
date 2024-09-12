@@ -1,9 +1,6 @@
 package com.example.summerproject2024.Number;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +9,17 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.summerproject2024.MainActivity;
 import com.example.summerproject2024.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NumberView_adapter extends RecyclerView.Adapter<NumberView_adapter.MyViewHolder> {
 
-    private List<List<String>> itemList;
+    private ArrayList<NumberItem> itemList;
     private String[] mData;
     private LayoutInflater mInflater;
-    public NumberView_adapter(List<List<String>> itemList)
+    public NumberView_adapter(ArrayList<NumberItem> itemList)
     {
         this.itemList = itemList;
     }
@@ -38,18 +35,19 @@ public class NumberView_adapter extends RecyclerView.Adapter<NumberView_adapter.
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.setItem(itemList.get(position).get(0),itemList.get(position).get(1),itemList.get(position).get(2));
+        NumberItem ni = itemList.get(position);
+        holder.aff.setText(ni.aff);
+        holder.subaff.setText(ni.subaff);
+        holder.name.setText(ni.name);
         holder.card_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int mPosition = holder.getAdapterPosition();
-
+                int mposion = holder.getAdapterPosition();
                 Context context = v.getContext();
-                University_Num_detail und = new University_Num_detail(context, itemList.get(mPosition));
-
+                University_Num_dialog und = new University_Num_dialog(context, ni);
+                und.show();
             }
         });
-
     }
 
     @Override
@@ -70,11 +68,6 @@ public class NumberView_adapter extends RecyclerView.Adapter<NumberView_adapter.
             subaff = itemView.findViewById(R.id.subaff);
             name = itemView.findViewById(R.id.name);
             card_view = itemView.findViewById(R.id.layout_container);
-        }
-        public void setItem(String aff, String subaff, String name){
-            this.aff.setText(aff);
-            this.subaff.setText(subaff);
-            this.name.setText(name);
         }
     }
 

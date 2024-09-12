@@ -1,7 +1,6 @@
 package com.example.summerproject2024.Number;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.summerproject2024.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProView_adaptor extends RecyclerView.Adapter<ProView_adaptor.MyViewHolder> {
 
-    private List<List<String>> itemList;
+    private ArrayList<ProItem> itemList;
     private LayoutInflater mInflater;
-    public ProView_adaptor(List<List<String>> itemList) {
+    public ProView_adaptor(ArrayList<ProItem> itemList) {
         this.itemList = itemList;
     }
 
@@ -34,15 +34,16 @@ public class ProView_adaptor extends RecyclerView.Adapter<ProView_adaptor.MyView
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.setItem(itemList.get(position).get(0),itemList.get(position).get(1));
+        ProItem pi = itemList.get(position);
+        holder.aff.setText(pi.aff);
+        holder.name.setText(pi.name);
         holder.card_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int mPosition = holder.getAdapterPosition();
-
+                int mposion = holder.getAdapterPosition();
                 Context context = v.getContext();
-                Professor_Num_detail pnd = new Professor_Num_detail(context, itemList.get(mPosition));
-
+                Professor_Num_dialog pnd = new Professor_Num_dialog(context, pi);
+                pnd.show();
             }
         });
 
@@ -65,10 +66,8 @@ public class ProView_adaptor extends RecyclerView.Adapter<ProView_adaptor.MyView
             name = itemView.findViewById(R.id.name);
             card_view = itemView.findViewById(R.id.layout_container);
         }
-        public void setItem(String aff, String name){
-            this.aff.setText(aff);
-            this.name.setText(name);
-        }
     }
+
+
 
 }
