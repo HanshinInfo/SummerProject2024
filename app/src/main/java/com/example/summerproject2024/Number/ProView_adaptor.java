@@ -35,12 +35,22 @@ public class ProView_adaptor extends RecyclerView.Adapter<ProView_adaptor.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         ProItem pi = itemList.get(position);
-        holder.aff.setText(pi.aff);
-        holder.name.setText(pi.name);
-        holder.card_view.setOnClickListener(new View.OnClickListener() {
+        if(pi.aff.equals(null)){
+            holder.aff.setText("정보없음");
+        }
+        else{
+            holder.aff.setText(pi.aff);
+        }
+        if(pi.name.equals(null)){
+            holder.name.setText("정보없음");
+        }
+        else{
+            holder.name.setText(pi.name);
+        }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int mposion = holder.getAdapterPosition();
                 Context context = v.getContext();
                 Professor_Num_dialog pnd = new Professor_Num_dialog(context, pi);
                 pnd.show();
@@ -62,8 +72,8 @@ public class ProView_adaptor extends RecyclerView.Adapter<ProView_adaptor.MyView
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            aff = itemView.findViewById(R.id.aff);
-            name = itemView.findViewById(R.id.name);
+            aff = itemView.findViewById(R.id.proaff);
+            name = itemView.findViewById(R.id.proname);
             card_view = itemView.findViewById(R.id.layout_container);
         }
     }

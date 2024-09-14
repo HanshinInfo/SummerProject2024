@@ -19,6 +19,7 @@ public class Professor_Num_dialog extends Dialog {
     public Professor_Num_dialog(@NonNull Context context, ProItem list) {
         super(context);
         this.info = list;
+        setContentView(R.layout.professor_detail);
         d_aff = findViewById(R.id.pro_aff);
         d_name = findViewById(R.id.pro_name);
         d_number = findViewById(R.id.pro_number);
@@ -29,7 +30,6 @@ public class Professor_Num_dialog extends Dialog {
     @Override
     protected void onStart(){
         super.onStart();
-        setContentView(R.layout.professor_detail);
         d_aff.setText(info.aff);
         d_name.setText(info.name);
         d_number.setText(info.phoneNum);

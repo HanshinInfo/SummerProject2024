@@ -33,9 +33,9 @@ public class University_Number extends Fragment {
         call_DB = new DatabaseHelper(getContext());
 
         //1
-        callNumInfo();
+        //callNumInfo();
         //
-        //callProfessorInfo();
+        callProfessorInfo();
         return view;
     }
     private void callNumInfo(){

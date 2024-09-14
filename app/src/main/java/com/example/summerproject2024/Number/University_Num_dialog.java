@@ -20,6 +20,7 @@ public class University_Num_dialog extends Dialog{
     public University_Num_dialog(@NonNull Context context, NumberItem ni) {
         super(context);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.number_detail);
         d_aff = findViewById(R.id.detail_aff);
         d_subaff = findViewById(R.id.detail_subaff);
         d_name = findViewById(R.id.detail_name);
@@ -32,7 +33,6 @@ public class University_Num_dialog extends Dialog{
     @Override
     protected void onStart(){
         super.onStart();
-        setContentView(R.layout.number_detail);
         d_aff.setText(info.aff);
         d_subaff.setText(info.subaff);
         d_name.setText(info.name);
