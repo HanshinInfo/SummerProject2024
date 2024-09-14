@@ -42,6 +42,19 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         int day = days.get(position);
         holder.dayText.setText(String.valueOf(day));
 
+        // 날짜 포맷 맞추기 ("2024-09-07")
+        String date = String.format("%d-%02d-%02d", getYear(), currentMonth + 1, day);
+
+        // 해당 날짜의 스케줄 확인
+        List<String> schedulesForDate = scheduleManager.getSchedulesForDate(date);
+        if (!schedulesForDate.isEmpty()) {
+            // 스케줄이 있을 경우 날짜 아래에 표시
+            holder.scheduleText.setVisibility(View.VISIBLE);
+            holder.scheduleText.setText(schedulesForDate.get(0));  // 첫 번째 스케줄만 표시
+        } else {
+            holder.scheduleText.setVisibility(View.GONE);
+        }
+
         // 색상 설정
         int textColor;
         int backgroundColor;
@@ -108,10 +121,12 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
 
     public static class CalendarViewHolder extends RecyclerView.ViewHolder {
         TextView dayText;
+        TextView scheduleText;  // 스케줄을 표시할 텍스트뷰
 
         public CalendarViewHolder(View itemView) {
             super(itemView);
             dayText = itemView.findViewById(R.id.dayText);
+            scheduleText = itemView.findViewById(R.id.scheduleText);  // 새로운 스케줄 텍스트뷰
         }
     }
 }

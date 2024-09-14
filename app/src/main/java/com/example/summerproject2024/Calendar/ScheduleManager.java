@@ -20,6 +20,7 @@ public class ScheduleManager {
     private final Context context;
     private final List<Schedule> schedules;
     private String selectedDate;
+    private CalendarAdapter adapter;
 
     public ScheduleManager(Context context) {
         this.context = context;
@@ -134,6 +135,17 @@ public class ScheduleManager {
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
         builder.show();
+    }
+
+    // 스케쥴 불러오는 메소드
+    public List<String> getSchedulesForDate(String date) {
+        List<String> matchingSchedules = new ArrayList<>();
+        for (Schedule schedule : schedules) {
+            if (schedule.getDate().equals(date)) {
+                matchingSchedules.add(schedule.getDescription());
+            }
+        }
+        return matchingSchedules;
     }
 
     // 버튼 클릭 리스너 설정

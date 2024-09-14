@@ -36,10 +36,10 @@ public class CalendarUtils {
         }
 
         // 다음 달의 시작 날짜 추가
-        int daysToAdd = 35 - days.size(); // 총 아이템 개수를 35개로 유지하기 위함 (5주)
-        for (int i = 1; i <= daysToAdd; i++) {
-            days.add(i);
-        }
+//        int daysToAdd = 35 - days.size(); // 총 아이템 개수를 35개로 유지하기 위함 (5주)
+//        for (int i = 1; i <= daysToAdd; i++) {
+//            days.add(i);
+//        }
 
         return days;
     }
