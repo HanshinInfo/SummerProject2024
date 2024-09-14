@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".Number.University_Num_dialog">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,8 +14,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="소속"
+            android:text="소속 "
             android:textColor="@color/black"
+            android:background="@color/material_on_background_emphasis_medium"
             android:textSize="30sp"/>
 
         <TextView
@@ -35,8 +35,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="세부 소속"
+            android:text="세부 "
             android:textColor="@color/black"
+            android:background="@color/material_on_background_emphasis_medium"
             android:textSize="30sp"/>
 
         <TextView
@@ -44,6 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
+            android:textAlignment="center"
             android:textSize="30sp" />
     </LinearLayout>
 
@@ -55,8 +57,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="호실"
+            android:text="호실 "
             android:textColor="@color/black"
+            android:background="@color/material_on_background_emphasis_medium"
             android:textSize="30sp"/>
 
         <TextView
@@ -75,7 +78,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="이름"
+            android:text="이름 "
+            android:background="@color/material_on_background_emphasis_medium"
             android:textColor="@color/black"
             android:textSize="30sp"/>
 
@@ -95,7 +99,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="전화 번호"
+            android:text="번호 "
+            android:background="@color/material_on_background_emphasis_medium"
             android:textColor="@color/black"
             android:textSize="30sp"/>
 
@@ -104,7 +109,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:textSize="30sp" />
+            android:textSize="20sp" />
     </LinearLayout>
 
 </LinearLayout>

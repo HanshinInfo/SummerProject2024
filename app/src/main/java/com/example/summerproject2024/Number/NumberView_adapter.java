@@ -39,10 +39,9 @@ public class NumberView_adapter extends RecyclerView.Adapter<NumberView_adapter.
         holder.aff.setText(ni.aff);
         holder.subaff.setText(ni.subaff);
         holder.name.setText(ni.name);
-        holder.card_view.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int mposion = holder.getAdapterPosition();
                 Context context = v.getContext();
                 University_Num_dialog und = new University_Num_dialog(context, ni);
                 und.show();
