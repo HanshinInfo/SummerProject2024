@@ -66,7 +66,7 @@ public class University_Number extends Fragment {
     }
 
     public void settingPage(String number){
-        if(number.equals("교내 전화번호")){
+        if(number.equals(getResources().getString(R.string.uni_number))){
             callNumInfo();
         }
         else{
@@ -110,11 +110,25 @@ public class University_Number extends Fragment {
                 }
                 else {
                     // 검색 단어를 포함하는지 확인
-                    for (int a = 0; a < itemList.size(); a++) {
-                        if (itemList.get(a).name.toLowerCase().contains(searchText.toLowerCase())) {
-                            search_list.add(itemList.get(a));
+                    for (int i = 0; i < itemList.size(); i++) {
+                        if(category.equals("소속")){
+                            if (itemList.get(i).aff.toLowerCase().contains(searchText.toLowerCase())) {
+                                search_list.add(itemList.get(i));
+                            }
+                            num_adapter.setItems(search_list);
                         }
-                        num_adapter.setItems(search_list);
+                        else if(category.equals("이름")){
+                            if (itemList.get(i).name.toLowerCase().contains(searchText.toLowerCase())) {
+                                search_list.add(itemList.get(i));
+                            }
+                            num_adapter.setItems(search_list);
+                        }
+                        else {
+                            if (itemList.get(i).phoneNumber.toLowerCase().contains(searchText.toLowerCase())) {
+                                search_list.add(itemList.get(i));
+                            }
+                            num_adapter.setItems(search_list);
+                        }
                     }
                 }
             }
@@ -129,6 +143,7 @@ public class University_Number extends Fragment {
         ArrayList<NumberItem> itemList = new ArrayList<>();
         ArrayList<NumberItem> search_list = new ArrayList<>();
         NumberView_adapter pro_adapter;
+
         for (int i = 0; i < pro_Info.length; i++) {
             String aff = pro_Info[i].get(0);
             String name = pro_Info[i].get(1);
@@ -159,11 +174,25 @@ public class University_Number extends Fragment {
                 }
                 else {
                     // 검색 단어를 포함하는지 확인
-                    for (int a = 0; a < itemList.size(); a++) {
-                        if (itemList.get(a).name.toLowerCase().contains(searchText.toLowerCase())) {
-                            search_list.add(itemList.get(a));
+                    for (int i = 0; i < itemList.size(); i++) {
+                        if(category.equals("소속")){
+                            if (itemList.get(i).aff.toLowerCase().contains(searchText.toLowerCase())) {
+                                search_list.add(itemList.get(i));
+                            }
+                            pro_adapter.setItems(search_list);
                         }
-                        pro_adapter.setItems(search_list);
+                        else if(category.equals("이름")){
+                            if (itemList.get(i).name.toLowerCase().contains(searchText.toLowerCase())) {
+                                search_list.add(itemList.get(i));
+                            }
+                            pro_adapter.setItems(search_list);
+                        }
+                        else {
+                            if (itemList.get(i).phoneNumber.toLowerCase().contains(searchText.toLowerCase())) {
+                                search_list.add(itemList.get(i));
+                            }
+                            pro_adapter.setItems(search_list);
+                        }
                     }
                 }
             }

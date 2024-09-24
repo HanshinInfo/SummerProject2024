@@ -3,6 +3,7 @@ package com.example.summerproject2024;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,6 +33,8 @@ import com.example.summerproject2024.Number.University_Number;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -66,6 +69,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Toolbar
     Toolbar toolbar;
     TextView page_title;
+
+    //Notification
+    HashMap<String, String> notice_link_map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +109,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        //notification
+        notice_link_map = new HashMap<>();
+        notice_link_map.put(getResources().getString(R.string.notice_notification), "https://hs.ac.kr/kor/4953/subview.do");
+        notice_link_map.put(getResources().getString(R.string.notice_event), "https://hs.ac.kr/kor/4955/subview.do");
+        notice_link_map.put(getResources().getString(R.string.notice_academic), "https://hs.ac.kr/kor/4956/subview.do");
+        notice_link_map.put(getResources().getString(R.string.notice_scholarship_community), "https://hs.ac.kr/kor/4957/subview.do");
+        notice_link_map.put(getResources().getString(R.string.notice_employment), "https://hs.ac.kr/kor/4958/subview.do");
+
         //Menu
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -117,10 +131,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-
-
-
-
     //Menu-item
     private void settingMenu() {
         menuList = (ExpandableListView) findViewById(R.id.menuList);
@@ -128,6 +138,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Campus_map
         menuGroup = new ArrayList<>();
         MenuGroup item = new MenuGroup(getResources().getString(R.string.map_page));
+        menuGroup.add(item);
+
+        //Notice
+        item = new MenuGroup(getResources().getString(R.string.notification));
+        item.child.addAll(notice_link_map.keySet());
         menuGroup.add(item);
 
         //schedule
@@ -162,7 +177,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String groupName = menuGroup.get(groupPosition).groupName;
 
                 if(groupName.equals(getResources().getString(R.string.map_page))){
-                    drawerLayout.closeDrawer(GravityCompat.START);
                     page_title.setText(groupName);
                     transaction = fragmentManager.beginTransaction();
                     transaction.replace(R.id.fragment_container_view, campus_map).commitAllowingStateLoss();
@@ -171,7 +185,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
 
                 if(groupName.equals(getResources().getString(R.string.schedule_page))){
-                    drawerLayout.closeDrawer(GravityCompat.START);
                     page_title.setText(groupName);
                     transaction = fragmentManager.beginTransaction();
                     transaction.replace(R.id.fragment_container_view, calendar_fragment).commitAllowingStateLoss();
@@ -180,7 +193,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
 
                 if(groupName.equals(getResources().getString(R.string.town_page))){
-                    drawerLayout.closeDrawer(GravityCompat.START);
                     page_title.setText(groupName);
                     transaction = fragmentManager.beginTransaction();
                     transaction.replace(R.id.fragment_container_view, university_town_info).commitAllowingStateLoss();
@@ -196,10 +208,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 
-                drawerLayout.closeDrawer(GravityCompat.START);
                 transaction = fragmentManager.beginTransaction();
                 String child = menuGroup.get(groupPosition).child.get(childPosition);
                 Bundle bundle = new Bundle();
+                if(menuGroup.get(groupPosition).groupName.equals(getResources().getString(R.string.notification))){
+                    for (String s : notice_link_map.keySet()) {
+                        if (child.equals(s)) {
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setData(Uri.parse(notice_link_map.get(s)));
+                            startActivity(intent);
+                            break;
+                        }
+                    }
+                    return true;
+                }
 
                 if(menuGroup.get(groupPosition).groupName.equals(getResources().getString(R.string.num_page))){
                     page_title.setText(child);
@@ -234,6 +256,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void closeMenu(int index){
+        drawerLayout.closeDrawer(GravityCompat.START);
         for(int i = 0; i < menuGroup.size(); i++){
             if(!menuGroup.get(i).child.isEmpty() && i != index){
                 menuList.collapseGroup(i);
