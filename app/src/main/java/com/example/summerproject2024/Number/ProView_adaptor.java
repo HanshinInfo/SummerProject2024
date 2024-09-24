@@ -77,7 +77,8 @@ public class ProView_adaptor extends RecyclerView.Adapter<ProView_adaptor.MyView
             card_view = itemView.findViewById(R.id.layout_container);
         }
     }
-
-
-
+    public void setItems(ArrayList<ProItem> list) {
+        itemList = list;
+        notifyDataSetChanged();
+    }
 }

@@ -5,6 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="검색어 입력"
+        android:inputType="textPersonName" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rview"

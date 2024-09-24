@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static String dbName = "Android.db";
-    public static int version = 34;
+    public static int version = 35;
 
     public DatabaseHelper(@Nullable Context context) {
 
@@ -212,7 +212,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return selectTable(sql);
     }
     public ArrayList<String>[] selectProfessorAll(){
-        String sql = "SELECT affiliation, name, CallNumber, officeNumber FROM ProfessorCallNumbers;";
+        String sql =
+                "SELECT affiliation, name, CallNumber, officeNumber FROM ProfessorCallNumbers group by name, officeNumber order by affiliation;";
         return selectTable(sql);
     }
 
@@ -222,11 +223,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<String>[] selectProfessorUsingaffiliation(String affiliation){
-        String sql = "SELECT affiliation, name, CallNumber, officeNumber FROM ProfessorCallNumbers WHERE affiliation = '"+affiliation+"';";;
+        String sql = "SELECT affiliation, name, CallNumber, officeNumber FROM ProfessorCallNumbers WHERE affiliation = '"+affiliation+"';";
         return selectTable(sql);
     }
     public ArrayList<String>[] selectCallNumbersAll(){
-        String sql = "SELECT affiliation, sub_affiliation, name, CallNumber, office_number FROM CallNumbers;";;
+        String sql = "SELECT affiliation, sub_affiliation, name, CallNumber, office_number FROM CallNumbers group by name, office_number order by affiliation;";
         return selectTable(sql);
     }
     public ArrayList<String>[] selectCallNumbersUsingName(String name){

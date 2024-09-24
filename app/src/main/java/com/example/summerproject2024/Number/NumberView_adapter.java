@@ -68,5 +68,10 @@ public class NumberView_adapter extends RecyclerView.Adapter<NumberView_adapter.
             card_view = itemView.findViewById(R.id.layout_container);
         }
     }
+    public void setItems(ArrayList<NumberItem> list) {
+        itemList = list;
+        notifyDataSetChanged();
+    }
+
 
 }
