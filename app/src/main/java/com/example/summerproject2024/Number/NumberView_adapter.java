@@ -37,8 +37,8 @@ public class NumberView_adapter extends RecyclerView.Adapter<NumberView_adapter.
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         NumberItem ni = itemList.get(position);
         holder.aff.setText(ni.aff);
-        holder.subaff.setText(ni.subaff);
         holder.name.setText(ni.name);
+        holder.number.setText(ni.phoneNumber);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,17 +55,16 @@ public class NumberView_adapter extends RecyclerView.Adapter<NumberView_adapter.
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView textView;
         TextView aff;
-        TextView subaff;
+        TextView number;
         TextView name;
         CardView card_view;
         public MyViewHolder(View itemView) {
             super(itemView);
 
             aff = itemView.findViewById(R.id.aff);
-            subaff = itemView.findViewById(R.id.subaff);
             name = itemView.findViewById(R.id.name);
+            number = itemView.findViewById(R.id.number);
             card_view = itemView.findViewById(R.id.layout_container);
         }
     }

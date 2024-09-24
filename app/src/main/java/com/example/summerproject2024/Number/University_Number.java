@@ -32,11 +32,18 @@ public class University_Number extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         call_DB = new DatabaseHelper(getContext());
 
-        //1
-        //callNumInfo();
-        //
-        callProfessorInfo();
+        String number = this.getArguments().getString("number_kind");
+        settingPage(number);
         return view;
+    }
+
+    public void settingPage(String number){
+        if(number.equals("교내 전화번호")){
+            callNumInfo();
+        }
+        else{
+            callProfessorInfo();
+        }
     }
     private void callNumInfo(){
         ArrayList<String>[] num_Info = call_DB.selectCallNumbersAll();
@@ -59,16 +66,16 @@ public class University_Number extends Fragment {
     private void callProfessorInfo(){
         ArrayList<String>[] pro_Info = call_DB.selectProfessorAll();
 
-        ArrayList<ProItem> itemList = new ArrayList<>();
+        ArrayList<NumberItem> itemList = new ArrayList<>();
 
         for (int i = 0; i < pro_Info.length; i++) {
             String aff = pro_Info[i].get(0);
             String name = pro_Info[i].get(1);
             String phoneNumber = pro_Info[i].get(2);
             String office = pro_Info[i].get(3);
-            itemList.add(new ProItem(aff, name, phoneNumber, office));
+            itemList.add(new NumberItem(aff, name, phoneNumber, office));
         }
-        ProView_adaptor pro_adapter = new ProView_adaptor(itemList);
+        NumberView_adapter pro_adapter = new NumberView_adapter(itemList);
         recyclerView.setAdapter(pro_adapter);
     }
 }

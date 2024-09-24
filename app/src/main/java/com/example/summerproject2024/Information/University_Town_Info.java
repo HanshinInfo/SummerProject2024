@@ -82,7 +82,7 @@ public class University_Town_Info extends Fragment {
 
 
 
-        private int getCurrentDay() {
+    private int getCurrentDay() {
         Date currentDate = new Date();
 
         Calendar calendar = Calendar.getInstance();

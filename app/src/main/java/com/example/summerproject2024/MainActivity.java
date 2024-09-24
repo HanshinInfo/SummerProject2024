@@ -88,10 +88,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fragment_container_view, campus_map).commitAllowingStateLoss();
 
-
-
-
-
         //MenuBtn
         menu_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if(menuGroup.get(groupPosition).groupName.equals(getResources().getString(R.string.num_page))){
                     page_title.setText(child);
                     if(university_number.isVisible()){
-//                        mascot_fragment.SettingPage(child);
+                        university_number.settingPage(child);
                     }
                     else{
                         bundle.putString("number_kind", child);
