@@ -98,6 +98,7 @@ public class Town_Info_Dialog extends Dialog {
         content.setSpan(new UnderlineSpan(), 0, data.get(0).length(), 0);
         location.setText(content);
 
+        content = new SpannableString(data.get(1));
         content.setSpan(new UnderlineSpan(), 0, data.get(1).length(), 0);
         number.setText(content);
     }

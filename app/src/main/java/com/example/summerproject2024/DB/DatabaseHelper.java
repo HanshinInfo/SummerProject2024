@@ -143,7 +143,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<String>[] selectBusinessZone(){
-        String sql = "SELECT name, category FROM BusinessZone;";
+        String sql = "SELECT name, category FROM BusinessZone ORDER BY name;";
         return selectTable(sql);
     }
 
