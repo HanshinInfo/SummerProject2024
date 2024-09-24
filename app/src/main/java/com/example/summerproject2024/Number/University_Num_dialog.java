@@ -2,6 +2,8 @@ package com.example.summerproject2024.Number;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -9,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.example.summerproject2024.Information.Town_Info_Dialog;
 import com.example.summerproject2024.MainActivity;
 import com.example.summerproject2024.R;
 
@@ -52,6 +55,13 @@ public class University_Num_dialog extends Dialog{
         d_name.setText(info.name);
         d_number.setText(info.phoneNumber);
         d_office.setText(info.office);
+        d_number.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+info.phoneNumber));
+                University_Num_dialog.this.getContext().startActivity(intent);
+            }
+        });
     }
 
     public void callProInfo(){

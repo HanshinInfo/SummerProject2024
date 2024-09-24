@@ -1,4 +1,6 @@
 package com.example.summerproject2024.Number;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;

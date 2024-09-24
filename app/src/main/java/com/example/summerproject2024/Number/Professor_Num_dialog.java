@@ -25,6 +25,7 @@ public class Professor_Num_dialog extends Dialog {
         d_number = findViewById(R.id.pro_number);
         d_office = findViewById(R.id.pro_office);
 
+
     }
 
     @Override

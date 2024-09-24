@@ -109,6 +109,7 @@
             android:id="@+id/detail_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="call"
             android:textColor="@color/black"
             android:textSize="20sp" />
     </LinearLayout>
