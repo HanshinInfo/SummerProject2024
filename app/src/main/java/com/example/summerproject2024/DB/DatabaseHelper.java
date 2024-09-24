@@ -370,7 +370,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public String insertBusinessHours(){
-        String sql = "INSERT INTO BusinessHours (name, day, hours) \n " +
+        String sql = "REPLACE INTO BusinessHours (name, day, hours) \n " +
                 "VALUES\n" +
                 "('행복한 콩박사',  '월', '11:00 - 21:00'), \n" +
                 "('행복한 콩박사',  '화', '11:00 - 21:00'), \n" +
@@ -488,7 +488,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public String insertBuilding(){
-        String sql = "INSERT INTO Building (building_code, building_name)\n" +
+        String sql = "REPLACE INTO Building (building_code, building_name)\n" +
                 "VALUES\n" +
                 "('1', '장공관(본관)'),\n" +
                 "('2', '필헌관(대학원)'),\n" +
@@ -510,7 +510,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public String insertAmenity(){
-        String sql = "INSERT INTO Amenity (category, building_code)\n" +
+        String sql = "REPLACE INTO Amenity (category, building_code)\n" +
                 "VALUES\n" +
 //                "('서점', '5'),\n" +
                 "('남학생휴게실', '3'),\n" +
@@ -540,7 +540,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public String insertCoordinate(){
-        String sql = "INSERT INTO Coordinate (building_code, x1, y1, x2, y2) VALUES\n" +
+        String sql = "REPLACE INTO Coordinate (building_code, x1, y1, x2, y2) VALUES\n" +
                 "('1', 1295,554,1379,641), \n" +
                 "('2', 1088,473,1172,560), \n" +
                 "('3', 1685,389,1772,473), \n" +
@@ -584,7 +584,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "용맹한 호랑이로 도전을 두려워하지 않으며 모든 활동을 경험하고 싶어해 항상 바쁘게 뛰어다니기 때문에 앞머리는 항상 바람 모양으로 돌돌 말려있다. " +
                 "도전을 두려워하는 친구를 만날 때마다 항상 성과가 어떻든 한 번 해보라는 말을 해주며 도전을 두려워하지 않는 한꾸가 도전자체가 값전 것이라는 메시지를 전달한다.";
 
-        String sql = "INSERT INTO Mascot (name, gender, hobby, specialty, dislike, birthBackground, source) VALUES\n" +
+        String sql = "REPLACE INTO Mascot (name, gender, hobby, specialty, dislike, birthBackground, source) VALUES\n" +
                 "('쿠오 (KU-O)', '?', '순찰하기<comma> 새로운 길 탐색하기<comma> 퍼즐 맞추기', '발차기', '대충', '" + ku_o + "', '쿠오와 버지'), \n" +
                 "('한고미 (HANGOMI)', '?', '학교 앞 맛집 탐방<comma> 한신공원 산책', '교수님과 학생들의 소통창구 되어주기', '?', '" + hangomi + "', '한고미'), \n" +
                 "('버지 (BUZZI)', '?', '독서', '철학<comma> 경제<comma> 그림<comma> 컴퓨터<comma> 외국어<comma> 체육', '송충이', '"+ buzzi + "', '쿠오와 버지'), \n" +
@@ -594,7 +594,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public String insertCallNumbers() {
-        String sql = "INSERT INTO CallNumbers (affiliation, sub_affiliation, name, CallNumber, office_number) VALUES\n" +
+        String sql = "REPLACE INTO CallNumbers (affiliation, sub_affiliation, name, CallNumber, office_number) VALUES\n" +
                 "('한신대학교','총장','강성영','031-379-0001','1201'),\n" +
                 "('교목실','교목실장','나현기','031-379-0011','4102'),\n" +
                 "('교목실','조교수','강은미','031-379-0781','17309'),\n" +
@@ -1033,7 +1033,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return sql;
     }
     public String insertProfessor(){
-        String sql = "INSERT INTO ProfessorCallNumbers (affiliation, name, CallNumber, officeNumber) VALUES\n" +
+        String sql = "REPLACE INTO ProfessorCallNumbers (affiliation, name, CallNumber, officeNumber) VALUES\n" +
                 "('신학대학','이영미','031-379-0383','2102'),\n" +
                 "('신학대학','방진현','031-379-0460','8105'),\n" +
                 "('신학대학','윤수빈','031-379-0420','8105'),\n" +
