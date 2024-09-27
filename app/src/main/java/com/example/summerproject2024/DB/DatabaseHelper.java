@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static String dbName = "Android.db";
-    public static int version = 35;
+    public static int version = 51;
 
     public DatabaseHelper(@Nullable Context context) {
 
@@ -130,7 +130,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<String> selectCategoryUsingAmenity(String building_code){
         ArrayList<String> categoryList = new ArrayList<String>();
 
-        String sql = "SELECT category FROM Amenity WHERE building_code = '"+ building_code + "';";
+        String sql = "SELECT category FROM Amenity WHERE building_code = '"+ building_code + "' GROUP BY category;";
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(sql, null);
@@ -197,46 +197,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return hoursMap;
     }
 
-    public ArrayList<String>[] selectBusinessZoneUsingName(String name){
-        String sql = "SELECT * FROM BusinessZone WHERE name = '"+name+"';";
-        return selectTable(sql);
-    }
-
-    public ArrayList<String>[] selectBusinessZoneUsingCategory(String category){
-        String sql = "SELECT * FROM BusinessZone WHERE category = '"+category+"';";
-        return selectTable(sql);
-    }
-
-    public ArrayList<String>[] selectAmenityUsingCategory(String category){
-        String sql = "SELECT * FROM Amenity WHERE category = '"+category+"';";
-        return selectTable(sql);
-    }
     public ArrayList<String>[] selectProfessorAll(){
         String sql =
                 "SELECT affiliation, name, CallNumber, officeNumber FROM ProfessorCallNumbers group by name, officeNumber order by affiliation;";
         return selectTable(sql);
     }
 
-    public ArrayList<String>[] selectProfessorUsingName(String name){
-        String sql = "SELECT affiliation, name, CallNumber, officeNumber FROM ProfessorCallNumbers WHERE name = '"+name+"';";
-        return selectTable(sql);
-    }
-
-    public ArrayList<String>[] selectProfessorUsingaffiliation(String affiliation){
-        String sql = "SELECT affiliation, name, CallNumber, officeNumber FROM ProfessorCallNumbers WHERE affiliation = '"+affiliation+"';";
-        return selectTable(sql);
-    }
     public ArrayList<String>[] selectCallNumbersAll(){
-        String sql = "SELECT affiliation, sub_affiliation, name, CallNumber, office_number FROM CallNumbers group by name, office_number order by affiliation;";
-        return selectTable(sql);
-    }
-    public ArrayList<String>[] selectCallNumbersUsingName(String name){
-        String sql = "SELECT affiliation, sub_affiliation, name, CallNumber, office_number FROM CallNumbers WHERE name = '"+name+"';";;
-        return selectTable(sql);
-    }
-
-    public ArrayList<String>[] selectCallNumbersUsingAffiliation(String affiliation){
-        String sql = "SELECT affiliation, sub_affiliation, name, CallNumber, office_number FROM CallNumbers WHERE affiliation = '"+affiliation+"';";;
+        String sql = "SELECT affiliation, sub_affiliation, name, CallNumber, office_number FROM CallNumbers group by sub_affiliation, affiliation, CallNumber, name, office_number order by affiliation;";
         return selectTable(sql);
     }
 

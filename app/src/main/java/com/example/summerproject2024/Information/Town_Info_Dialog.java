@@ -3,7 +3,6 @@ package com.example.summerproject2024.Information;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
@@ -38,7 +37,7 @@ public class Town_Info_Dialog extends Dialog {
     public Town_Info_Dialog(@NonNull Context context) {
         super(context);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.town_info_detail_page);
+        setContentView(R.layout.town_info_dialog);
 
         image = findViewById(R.id.image);
         name = findViewById(R.id.name);

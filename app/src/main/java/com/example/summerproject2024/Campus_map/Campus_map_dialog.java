@@ -2,6 +2,7 @@ package com.example.summerproject2024.Campus_map;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -58,7 +59,7 @@ public class Campus_map_dialog extends Dialog {
         buildingHash.put("4", R.drawable.building_04);
         buildingHash.put("5", R.drawable.building_05);
         buildingHash.put("6", R.drawable.building_06);
-        buildingHash.put("7", 0);
+        buildingHash.put("7", R.drawable.building_07);
         buildingHash.put("8", R.drawable.building_08);
         buildingHash.put("9", R.drawable.building_09);
         buildingHash.put("10", R.drawable.building_10);
@@ -89,6 +90,8 @@ public class Campus_map_dialog extends Dialog {
     private void setCategory(String code) {
         ArrayList<String> category = new ArrayList<String>();
         category = db.selectCategoryUsingAmenity(code);
+        Log.v("code test", code + " ");
+        Log.v("category value", category.size() + " ");
 
         categoryImage = new ImageView[5];
         categoryImage[0] = (ImageView) findViewById(R.id.icon1);

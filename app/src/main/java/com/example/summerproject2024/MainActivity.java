@@ -78,7 +78,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         drawerLayout = (DrawerLayout) findViewById(R.id.main);
         menu_button = (ImageButton) findViewById(R.id.menu_button);
 
@@ -128,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         page_title = toolbar.findViewById(R.id.page_title);
 
         DatabaseHelper db = new DatabaseHelper(this);
+
 
     }
 
