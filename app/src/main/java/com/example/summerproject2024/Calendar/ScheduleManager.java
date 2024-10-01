@@ -28,11 +28,16 @@ public class ScheduleManager {
     private final Context context;
     private final List<Schedule> schedules;
     private String selectedDate;
+    private Calendar currentCalendar;
+    private CalendarAdapter calendarAdapter;
 
-    public ScheduleManager(Context context) {
+    public ScheduleManager(Context context, CalendarAdapter adapter) {
         this.context = context;
         this.selectedDate = getCurrentDate();
         this.schedules = loadSchedulesFromFile();
+        this.currentCalendar = Calendar.getInstance();
+        this.calendarAdapter = adapter;
+        Log.d("ScheduleManager", "Initialized with adapter: " + (adapter != null));
     }
 
     // 현재 날짜를 반환하는 메서드 (초기화 시 사용)
@@ -125,6 +130,14 @@ public class ScheduleManager {
             // 일정 추가 (선택된 날짜, 시작 시간, 종료 시간, 설명)
             schedules.add(new Schedule(selectedDate, startTime, endTime, description));
             saveSchedulesToFile(); // 파일에 저장
+
+            // 달력 업데이트
+            if (calendarAdapter != null) { // null 체크 추가
+                calendarAdapter.updateData(CalendarUtils.generateCalendarData(currentCalendar), currentCalendar.get(Calendar.MONTH));
+            } else {
+                Log.e("ScheduleManager", "CalendarAdapter is null, unable to update data.");
+            }
+
             dialog.dismiss(); // 팝업 닫기
         });
 
@@ -157,10 +170,19 @@ public class ScheduleManager {
             String selectedSchedule = scheduleArray[which];
             schedules.removeIf(schedule -> schedule.getDate().equals(selectedDate) && schedule.getDescription().equals(selectedSchedule));
             saveSchedulesToFile();
+
+            // 달력 업데이트
+            if (calendarAdapter != null) { // null 체크 추가
+                calendarAdapter.updateData(CalendarUtils.generateCalendarData(currentCalendar), currentCalendar.get(Calendar.MONTH));
+            } else {
+                Log.e("ScheduleManager", "CalendarAdapter is null, unable to update data.");
+            }
+
             Toast.makeText(context, "Schedule deleted successfully!", Toast.LENGTH_SHORT).show();
         });
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
 
         builder.show();
     }

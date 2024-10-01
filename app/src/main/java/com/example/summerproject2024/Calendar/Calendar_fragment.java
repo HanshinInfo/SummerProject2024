@@ -33,14 +33,17 @@ public class Calendar_fragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 7));
 
         currentCalendar = Calendar.getInstance(); // 초기화
-        scheduleManager = new ScheduleManager(getContext()); // ScheduleManager 초기화
 
         List<Integer> days = CalendarUtils.generateCalendarData(currentCalendar);
         int currentMonth = currentCalendar.get(Calendar.MONTH);
 
-        // 어댑터 설정
-        adapter = new CalendarAdapter(getContext(), days, currentMonth, scheduleManager);
+        // 어댑터 설정 (먼저 어댑터를 초기화)
+        adapter = new CalendarAdapter(getContext(), days, currentMonth, null); // 초기화 시점에서 scheduleManager를 null로 설정
         recyclerView.setAdapter(adapter);
+
+        // ScheduleManager 초기화
+        scheduleManager = new ScheduleManager(getContext(), adapter); // ScheduleManager 초기화
+        adapter.setScheduleManager(scheduleManager); // 어댑터에 scheduleManager 설정
 
         CalendarUtils.updateMonthText(currentCalendar, monthText);
 

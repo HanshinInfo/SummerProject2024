@@ -30,6 +30,10 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         this.scheduleManager = scheduleManager;
     }
 
+    public void setScheduleManager(ScheduleManager scheduleManager) {
+        this.scheduleManager = scheduleManager; // scheduleManager를 설정하는 메서드
+    }
+
     @NonNull
     @Override
     public CalendarViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -40,7 +44,6 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
     @Override
     public void onBindViewHolder(@NonNull CalendarViewHolder holder, int position) {
         int day = days.get(position);
-//        holder.dayText.setText(String.valueOf(day));
 
         if (day == 0) {
             // 빈칸일 경우: TextView를 숨김 처리
@@ -96,26 +99,9 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
     }
 
     public void updateData(List<Integer> newDays, int currentMonth) {
-//        this.days = newDays;
-//        this.currentMonth = currentMonth;
-//        notifyDataSetChanged();
-
-        // 추가된 아이템이 있을 경우
-        if (newDays.size() > this.days.size()) {
-            int positionStart = this.days.size(); // 추가되는 위치
-            this.days = newDays; // 새로운 데이터로 교체
-            notifyItemRangeInserted(positionStart, newDays.size() - positionStart); // 추가된 아이템 알림
-        } else if (newDays.size() < this.days.size()) {
-            int positionStart = newDays.size(); // 제거되는 위치
-            this.days = newDays; // 새로운 데이터로 교체
-            notifyItemRangeRemoved(positionStart, this.days.size() - positionStart); // 제거된 아이템 알림
-        } else {
-            // 데이터를 교체했으나 크기가 같을 때
-            this.days = newDays;
-            notifyDataSetChanged(); // 전체 업데이트
-        }
-
-        this.currentMonth = currentMonth; // 현재 월 업데이트
+        this.days = newDays;
+        this.currentMonth = currentMonth;
+        notifyDataSetChanged();
     }
 
     private int getYear() {
