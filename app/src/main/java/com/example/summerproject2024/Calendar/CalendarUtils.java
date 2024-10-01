@@ -19,27 +19,18 @@ public class CalendarUtils {
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         int daysInCurrentMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-        // 이전 달의 마지막 날
-        Calendar prevMonthCalendar = (Calendar) calendar.clone();
-        prevMonthCalendar.add(Calendar.MONTH, -1);
-        int daysInPrevMonth = prevMonthCalendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        // 현재 달의 첫 번째 날이 시작하는 요일을 가져옴 (1: 일요일, 7: 토요일)
+        int firstDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1; // 월요일이 0이 되도록 조정
 
-        // 이전 달의 마지막 날 추가
-        int firstDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-        for (int i = daysInPrevMonth - firstDayOfWeek + 1; i <= daysInPrevMonth; i++) {
-            days.add(i);
+        // 첫 번째 날짜가 시작되는 칸 이전을 빈칸으로 채움
+        for (int i = 0; i < firstDayOfWeek; i++) {
+            days.add(0); // 0은 빈칸을 의미
         }
 
         // 현재 월의 날짜 추가
         for (int i = 1; i <= daysInCurrentMonth; i++) {
             days.add(i);
         }
-
-        // 다음 달의 시작 날짜 추가
-//        int daysToAdd = 35 - days.size(); // 총 아이템 개수를 35개로 유지하기 위함 (5주)
-//        for (int i = 1; i <= daysToAdd; i++) {
-//            days.add(i);
-//        }
 
         return days;
     }

@@ -1,7 +1,6 @@
 package com.example.summerproject2024.Calendar;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +14,7 @@ import com.example.summerproject2024.R;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder> {
     private Context context;
@@ -40,44 +40,30 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
     @Override
     public void onBindViewHolder(@NonNull CalendarViewHolder holder, int position) {
         int day = days.get(position);
+//        holder.dayText.setText(String.valueOf(day));
+
+        if (day == 0) {
+            // 빈칸일 경우: TextView를 숨김 처리
+            holder.itemView.setVisibility(View.GONE);
+            holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0)); // 높이와 너비를 0으로 설정해 공간을 없앰
+        } else {
+            // 날짜 포맷 맞추기 ("2024-09-07")
+            String date = String.format(Locale.KOREA, "%d-%02d-%02d", getYear(), currentMonth + 1, day);
+
+            // 해당 날짜의 스케줄 확인
+            List<String> schedulesForDate = scheduleManager.getSchedulesForDate(date);
+            if (!schedulesForDate.isEmpty()) {
+                // 스케줄이 있을 경우 날짜 아래에 표시
+                holder.scheduleText.setVisibility(View.VISIBLE);
+                holder.scheduleText.setText(schedulesForDate.get(0));  // 첫 번째 스케줄만 표시
+            } else {
+                holder.scheduleText.setVisibility(View.GONE);
+            }
+        }
+
+        // 날짜 텍스트 설정
         holder.dayText.setText(String.valueOf(day));
-
-        // 날짜 포맷 맞추기 ("2024-09-07")
-        String date = String.format("%d-%02d-%02d", getYear(), currentMonth + 1, day);
-
-        // 해당 날짜의 스케줄 확인
-        List<String> schedulesForDate = scheduleManager.getSchedulesForDate(date);
-        if (!schedulesForDate.isEmpty()) {
-            // 스케줄이 있을 경우 날짜 아래에 표시
-            holder.scheduleText.setVisibility(View.VISIBLE);
-            holder.scheduleText.setText(schedulesForDate.get(0));  // 첫 번째 스케줄만 표시
-        } else {
-            holder.scheduleText.setVisibility(View.GONE);
-        }
-
-        // 색상 설정
-        int textColor;
-        int backgroundColor;
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.MONTH, currentMonth);
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-
-        int firstDayOfMonth = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-        int daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-
-        if (position < firstDayOfMonth || position >= firstDayOfMonth + daysInMonth) {
-            // 해당 월에 맞지 않는 날짜
-            textColor = Color.LTGRAY;
-            backgroundColor = Color.TRANSPARENT;
-        } else {
-            // 해당 월의 날짜
-            textColor = Color.BLACK;
-            backgroundColor = Color.WHITE;
-        }
-
-        holder.dayText.setTextColor(textColor);
-        holder.dayText.setBackgroundColor(backgroundColor);
+        holder.itemView.setClickable(true); // 유효한 날짜는 클릭 가능
 
         // 현재 위치의 아이템 배경색 설정
         int selectedColor = ContextCompat.getColor(context, R.color.selected_color);
@@ -110,9 +96,26 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
     }
 
     public void updateData(List<Integer> newDays, int currentMonth) {
-        this.days = newDays;
-        this.currentMonth = currentMonth;
-        notifyDataSetChanged();
+//        this.days = newDays;
+//        this.currentMonth = currentMonth;
+//        notifyDataSetChanged();
+
+        // 추가된 아이템이 있을 경우
+        if (newDays.size() > this.days.size()) {
+            int positionStart = this.days.size(); // 추가되는 위치
+            this.days = newDays; // 새로운 데이터로 교체
+            notifyItemRangeInserted(positionStart, newDays.size() - positionStart); // 추가된 아이템 알림
+        } else if (newDays.size() < this.days.size()) {
+            int positionStart = newDays.size(); // 제거되는 위치
+            this.days = newDays; // 새로운 데이터로 교체
+            notifyItemRangeRemoved(positionStart, this.days.size() - positionStart); // 제거된 아이템 알림
+        } else {
+            // 데이터를 교체했으나 크기가 같을 때
+            this.days = newDays;
+            notifyDataSetChanged(); // 전체 업데이트
+        }
+
+        this.currentMonth = currentMonth; // 현재 월 업데이트
     }
 
     private int getYear() {
