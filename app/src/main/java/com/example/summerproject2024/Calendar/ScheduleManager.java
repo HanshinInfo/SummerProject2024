@@ -94,28 +94,6 @@ public class ScheduleManager {
         }).start();
     }
 
-//    public void fetchAndStoreAcademicSchedules() {
-//        new Thread(() -> {
-//            List<Schedule> fetchedSchedules = crawler.fetchAcademicSchedules();
-//            schedules.addAll(fetchedSchedules);
-//            saveSchedulesToFile();
-//
-//            // UI 스레드에서 Toast 메시지와 UI 업데이트
-//            new Handler(Looper.getMainLooper()).post(() -> {
-//                Toast.makeText(context, "Academic schedules fetched and saved.", Toast.LENGTH_SHORT).show();
-//
-//                if (calendarAdapter != null) {
-//                    List<Integer> daysList = CalendarUtils.generateCalendarData(currentCalendar);
-//                    calendarAdapter.updateData(daysList, currentCalendar.get(Calendar.MONTH));
-//                } else {
-//                    Log.e("ScheduleManager", "CalendarAdapter is null, unable to update data.");
-//                }
-//            });
-//
-//            Log.d("ScheduleManager", "Academic schedules fetched and stored.");
-//        }).start();
-//    }
-
     // 일정을 파일에 저장
     private void saveSchedulesToFile() {
         try (FileOutputStream fos = context.openFileOutput("schedules.txt", Context.MODE_PRIVATE);

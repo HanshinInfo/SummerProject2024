@@ -64,47 +64,4 @@ public class AcademicScheduleCrawler {
         }
         return fetchedSchedules;
     }
-
-
-//    public List<Schedule> fetchAcademicSchedules() {
-//        List<Schedule> fetchedSchedules = new ArrayList<>();
-//        try {
-//            Document doc = Jsoup.connect(URL).get();
-//            Elements months = doc.select("li");
-//
-//            for (Element month : months) {
-//                Elements days = month.select("dl > dt");
-//                Elements events = month.select("dl > dd");
-//
-//                for (int i = 0; i < days.size(); i++) {
-//                    Element dayElement = days.get(i).selectFirst("span");
-//                    Element eventElement = events.get(i);
-//
-//                    if (dayElement == null || eventElement == null) {
-//                        Log.w("AcademicScheduleCrawler", "Day or event element is null, skipping this entry.");
-//                        continue;
-//                    }
-//
-//                    String day = dayElement.text();
-//                    String event = eventElement.text();
-//
-//                    String[] dayParts = day.split(" ");
-//                    String[] monthDay = dayParts[0].split("-");
-//
-//                    if (monthDay.length == 2) {
-//                        String eventDate = String.format(
-//                                "%s-%02d-%02d", Calendar.getInstance().get(Calendar.YEAR),
-//                                Integer.parseInt(monthDay[0]), Integer.parseInt(monthDay[1])
-//                        );
-//
-//                        fetchedSchedules.add(new Schedule(eventDate, "", "", event));
-//                        Log.d("AcademicScheduleCrawler", "Added schedule: " + eventDate + " - " + event);
-//                    }
-//                }
-//            }
-//        } catch (IOException e) {
-//            Log.e("ScheduleManager", "Error fetching academic schedules.", e);
-//        }
-//        return fetchedSchedules;
-//    }
 }
