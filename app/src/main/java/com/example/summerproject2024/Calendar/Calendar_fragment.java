@@ -25,6 +25,7 @@ public class Calendar_fragment extends Fragment {
     private Calendar currentCalendar;
     private ScheduleManager scheduleManager;
 
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.calendar_fragment, container, false);
 
@@ -46,6 +47,9 @@ public class Calendar_fragment extends Fragment {
         adapter.setScheduleManager(scheduleManager); // 어댑터에 scheduleManager 설정
 
         CalendarUtils.updateMonthText(currentCalendar, monthText);
+
+        // 학사 일정 크롤링 및 저장
+        scheduleManager.fetchAndStoreAcademicSchedules();
 
         // 버튼 클릭 리스너 설정
         view.findViewById(R.id.prevMonthButton).setOnClickListener(v -> CalendarUtils.moveToPreviousMonth(currentCalendar, adapter, monthText));

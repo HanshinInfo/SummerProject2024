@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.view.View;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.example.summerproject2024.R;
 
@@ -30,6 +32,7 @@ public class ScheduleManager {
     private String selectedDate;
     private Calendar currentCalendar;
     private CalendarAdapter calendarAdapter;
+    private final AcademicScheduleCrawler crawler;
 
     public ScheduleManager(Context context, CalendarAdapter adapter) {
         this.context = context;
@@ -37,6 +40,7 @@ public class ScheduleManager {
         this.schedules = loadSchedulesFromFile();
         this.currentCalendar = Calendar.getInstance();
         this.calendarAdapter = adapter;
+        this.crawler = new AcademicScheduleCrawler();
         Log.d("ScheduleManager", "Initialized with adapter: " + (adapter != null));
     }
 
@@ -54,6 +58,64 @@ public class ScheduleManager {
         this.selectedDate = String.format(Locale.KOREA, "%d-%02d-%02d", year, month, day);
     }
 
+    // 웹에서 학사 일정을 크롤링하여 저장하고 캘린더 업데이트
+    public void fetchAndStoreAcademicSchedules() {
+        new Thread(() -> {
+            List<Schedule> fetchedSchedules = crawler.fetchAcademicSchedules();
+
+            // 중복되지 않은 일정만 추가
+            for (Schedule newSchedule : fetchedSchedules) {
+                boolean isDuplicate = false;
+                for (Schedule existingSchedule : schedules) {
+                    if (existingSchedule.getDate().equals(newSchedule.getDate()) &&
+                            existingSchedule.getDescription().equals(newSchedule.getDescription())) {
+                        isDuplicate = true;
+                        break;
+                    }
+                }
+                if (!isDuplicate) {
+                    schedules.add(newSchedule);
+                }
+            }
+
+            saveSchedulesToFile();
+
+            // UI 업데이트
+            new Handler(Looper.getMainLooper()).post(() -> {
+                if (calendarAdapter != null) {
+                    List<Integer> daysList = CalendarUtils.generateCalendarData(currentCalendar);
+                    calendarAdapter.updateData(daysList, currentCalendar.get(Calendar.MONTH));
+                } else {
+                    Log.e("ScheduleManager", "CalendarAdapter is null, unable to update data.");
+                }
+                Toast.makeText(context, "Academic schedules fetched and updated.", Toast.LENGTH_SHORT).show();
+            });
+
+        }).start();
+    }
+
+//    public void fetchAndStoreAcademicSchedules() {
+//        new Thread(() -> {
+//            List<Schedule> fetchedSchedules = crawler.fetchAcademicSchedules();
+//            schedules.addAll(fetchedSchedules);
+//            saveSchedulesToFile();
+//
+//            // UI 스레드에서 Toast 메시지와 UI 업데이트
+//            new Handler(Looper.getMainLooper()).post(() -> {
+//                Toast.makeText(context, "Academic schedules fetched and saved.", Toast.LENGTH_SHORT).show();
+//
+//                if (calendarAdapter != null) {
+//                    List<Integer> daysList = CalendarUtils.generateCalendarData(currentCalendar);
+//                    calendarAdapter.updateData(daysList, currentCalendar.get(Calendar.MONTH));
+//                } else {
+//                    Log.e("ScheduleManager", "CalendarAdapter is null, unable to update data.");
+//                }
+//            });
+//
+//            Log.d("ScheduleManager", "Academic schedules fetched and stored.");
+//        }).start();
+//    }
+
     // 일정을 파일에 저장
     private void saveSchedulesToFile() {
         try (FileOutputStream fos = context.openFileOutput("schedules.txt", Context.MODE_PRIVATE);
@@ -62,11 +124,20 @@ public class ScheduleManager {
             for (Schedule schedule : schedules) {
                 writer.write(schedule.getDate() + " " + schedule.getStartTime() + " - " + schedule.getEndTime() + " : " + schedule.getDescription() + "\n");
             }
-            writer.flush();  // 데이터를 파일에 즉시 저장
-            Toast.makeText(context, "Schedules saved successfully!", Toast.LENGTH_SHORT).show();
+            writer.flush(); // 데이터를 파일에 즉시 저장
+
+            // UI 스레드에서 Toast 실행
+            new Handler(Looper.getMainLooper()).post(() ->
+                    Toast.makeText(context, "Schedules saved successfully!", Toast.LENGTH_SHORT).show()
+            );
+
         } catch (IOException e) {
             Log.e("ScheduleManager", "Failed to save schedules.", e); // 오류 메시지와 예외를 로그로 기록
-            Toast.makeText(context, "Failed to save schedules.", Toast.LENGTH_SHORT).show();
+
+            // UI 스레드에서 Toast 실행
+            new Handler(Looper.getMainLooper()).post(() ->
+                    Toast.makeText(context, "Failed to save schedules.", Toast.LENGTH_SHORT).show()
+            );
         }
     }
 
@@ -80,7 +151,7 @@ public class ScheduleManager {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                // "날짜 시작시간 - 종료시간 : 설명" 형식이므로 이를 제대로 파싱
+                // "날짜 시작시간 - 종료시간 : 설명" 형식으로 파싱
                 String[] parts = line.split(" : ");
                 if (parts.length == 2) {
                     String[] dateAndTime = parts[0].split(" ");
@@ -95,11 +166,16 @@ public class ScheduleManager {
             }
         } catch (IOException e) {
             Log.e("ScheduleManager", "Failed to load schedules.", e); // 오류 메시지와 예외를 로그로 기록
-            Toast.makeText(context, "Failed to load schedules.", Toast.LENGTH_SHORT).show();
+
+            // UI 스레드에서 Toast 실행
+            new Handler(Looper.getMainLooper()).post(() ->
+                    Toast.makeText(context, "Failed to load schedules.", Toast.LENGTH_SHORT).show()
+            );
         }
 
         return schedules;
     }
+
 
     // 팝업을 통해 일정 추가
     public void showAddSchedulePopup() {
