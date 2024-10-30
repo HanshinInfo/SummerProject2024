@@ -16,8 +16,8 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/day_of_the_week"
-        app:layout_constraintEnd_toStartOf="@+id/nextMonthButton"
-        app:layout_constraintStart_toEndOf="@+id/prevMonthButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
@@ -123,24 +123,29 @@
         android:id="@+id/prevMonthButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="55dp"
+        android:background="#FDF6FE"
+        android:backgroundTint="#FDF6FE"
+        android:contentDescription="@string/previous_month"
         app:layout_constraintBottom_toTopOf="@+id/day_of_the_week"
-        app:layout_constraintEnd_toStartOf="@+id/monthText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/chevron_left"
-        android:contentDescription="@string/previous_month" />
+        tools:tint="#1D1B20" />
 
     <!-- 다음 달 넘김 버튼 -->
     <ImageButton
         android:id="@+id/nextMonthButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="55dp"
+        android:background="#FDF6FE"
+        android:backgroundTint="#FDF6FE"
+        android:contentDescription="@string/next_month"
         app:layout_constraintBottom_toTopOf="@+id/day_of_the_week"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/monthText"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/chevron_right"
-        android:contentDescription="@string/next_month" />
+        app:srcCompat="@drawable/chevron_right" />
 
     <!-- 일정 추가 버튼 -->
     <LinearLayout

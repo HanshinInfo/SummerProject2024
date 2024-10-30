@@ -7,4 +7,12 @@
         <item name="android:layout_marginEnd">10dp</item>
         <item name="android:paddingBottom">10dp</item>
     </style>
+
+    <style name="scheduleStyle">
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:layout_marginEnd">5dp</item>
+    </style>
 </resources>

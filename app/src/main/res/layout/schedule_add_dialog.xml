@@ -1,97 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <!-- 일정 내용 입력 텍스트 -->
-    <TextView
-        android:id="@+id/description_label"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Enter schedule description"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:background="@drawable/border"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:id="@+id/description_label"
+            style="@style/scheduleStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Enter schedule description"
+            android:textColor="@android:color/black"
+            android:textSize="15dp" />
+
+        <EditText
+            android:id="@+id/schedule_description"
+            style="@style/scheduleStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:hint="Schedule description"
+            android:paddingBottom="10dp" />
+
+        <TextView
+            android:id="@+id/start_time_label"
+            style="@style/scheduleStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Start time"
+            android:textSize="16dp" />
+
+        <Spinner
+            android:id="@+id/start_time_spinner"
+            style="@style/scheduleStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:paddingBottom="5dp" />
+
+        <TextView
+            android:id="@+id/end_time_label"
+            style="@style/scheduleStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:text="End time"
+            android:textSize="16dp" />
+
+        <Spinner
+            android:id="@+id/end_time_spinner"
+            style="@style/scheduleStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:paddingBottom="5dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/confirm_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/sub_bgColor"
+                android:text="Confirm" />
+
+            <Button
+                android:id="@+id/cancel_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/sub_bgColor"
+                android:text="Cancel" />
+        </LinearLayout>
+    </LinearLayout>
 
     <!-- 일정 내용 입력 -->
-    <EditText
-        android:id="@+id/schedule_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Schedule description"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintTop_toBottomOf="@id/description_label"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- 시작 시간 텍스트 -->
-    <TextView
-        android:id="@+id/start_time_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start time"
-        android:textSize="16sp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintTop_toBottomOf="@id/schedule_description"
-        app:layout_constraintStart_toStartOf="parent"/>
 
     <!-- 시작 시간 선택 -->
-    <Spinner
-        android:id="@+id/start_time_spinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintTop_toBottomOf="@id/start_time_label"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- 종료 시간 텍스트 -->
-    <TextView
-        android:id="@+id/end_time_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="End time"
-        android:textSize="16sp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintTop_toBottomOf="@id/start_time_spinner"
-        app:layout_constraintStart_toStartOf="parent"/>
 
     <!-- 종료 시간 선택 -->
-    <Spinner
-        android:id="@+id/end_time_spinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintTop_toBottomOf="@id/end_time_label"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- 확인 버튼 -->
-    <Button
-        android:id="@+id/confirm_button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Confirm"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/end_time_spinner"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
 
     <!-- 취소 버튼 -->
-    <Button
-        android:id="@+id/cancel_button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Cancel"
-        app:layout_constraintTop_toBottomOf="@id/confirm_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

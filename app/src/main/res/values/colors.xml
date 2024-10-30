@@ -3,6 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="ivory">#FFFFF0</color>
+    <color name="khaki">#F0E68C</color>
 
     <color name="sub_bgColor">#957EEC</color>
     <color name="main_bgColor">#F9F8FF</color>
