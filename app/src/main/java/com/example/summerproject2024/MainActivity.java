@@ -3,7 +3,6 @@ package com.example.summerproject2024;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,7 +10,9 @@ import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -33,8 +34,6 @@ import com.example.summerproject2024.Number.University_Number;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -72,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //Notification
     HashMap<String, String> notice_link_map;
+    static long backpressTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,8 +127,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         page_title = toolbar.findViewById(R.id.page_title);
 
         DatabaseHelper db = new DatabaseHelper(this);
-
-
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                    getSupportFragmentManager().popBackStack();
+                } else {
+                    // 두 번 누르면 종료
+                    if (System.currentTimeMillis() > backpressTime + 2000) {
+                        backpressTime = System.currentTimeMillis();
+                        Toast.makeText(MainActivity.this, "한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        finish();
+                    }
+                }
+            }
+        });
     }
 
     //Menu-item
@@ -179,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if(groupName.equals(getResources().getString(R.string.map_page))){
                     page_title.setText(groupName);
                     transaction = fragmentManager.beginTransaction();
+                    transaction.setCustomAnimations(R.anim.from_right, 0);
                     transaction.replace(R.id.fragment_container_view, campus_map).commitAllowingStateLoss();
                     closeMenu(-1);
                     return true;
@@ -187,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if(groupName.equals(getResources().getString(R.string.schedule_page))){
                     page_title.setText(groupName);
                     transaction = fragmentManager.beginTransaction();
+                    transaction.setCustomAnimations(R.anim.from_right, 0);
                     transaction.replace(R.id.fragment_container_view, calendar_fragment).commitAllowingStateLoss();
                     closeMenu(-1);
                     return true;
@@ -195,6 +211,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if(groupName.equals(getResources().getString(R.string.town_page))){
                     page_title.setText(groupName);
                     transaction = fragmentManager.beginTransaction();
+                    transaction.setCustomAnimations(R.anim.from_right, 0);
                     transaction.replace(R.id.fragment_container_view, university_town_info).commitAllowingStateLoss();
                     closeMenu(-1);
                     return true;
@@ -231,6 +248,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     else{
                         bundle.putString("number_kind", child);
                         university_number.setArguments(bundle);
+                        transaction.setCustomAnimations(R.anim.from_right, 0);
                         transaction.replace(R.id.fragment_container_view, university_number).commitAllowingStateLoss();
                     }
                     closeMenu(groupPosition);
@@ -245,6 +263,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     else{
                         bundle.putString("mascot_name", child);
                         mascot_fragment.setArguments(bundle);
+                        transaction.setCustomAnimations(R.anim.from_right, 0);
                         transaction.replace(R.id.fragment_container_view, mascot_fragment).commitAllowingStateLoss();
                     }
                     closeMenu(groupPosition);
@@ -298,4 +317,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         return false;
     }
+
 }

@@ -37,6 +37,7 @@ public class Campus_map extends Fragment {
     Bitmap bitmap;
     Bitmap resized;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
@@ -78,4 +79,5 @@ public class Campus_map extends Fragment {
 
         return view;
     }
+
 }
