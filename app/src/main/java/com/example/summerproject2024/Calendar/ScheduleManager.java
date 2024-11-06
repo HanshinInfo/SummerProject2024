@@ -1,9 +1,9 @@
 package com.example.summerproject2024.Calendar;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -88,7 +88,7 @@ public class ScheduleManager {
                 } else {
                     Log.e("ScheduleManager", "CalendarAdapter is null, unable to update data.");
                 }
-                Toast.makeText(context, "Academic schedules fetched and updated.", Toast.LENGTH_SHORT).show();
+                Log.i("ScheduleManager", "Academic schedules fetched and updated.");
             });
 
         }).start();
@@ -104,18 +104,9 @@ public class ScheduleManager {
             }
             writer.flush(); // 데이터를 파일에 즉시 저장
 
-            // UI 스레드에서 Toast 실행
-            new Handler(Looper.getMainLooper()).post(() ->
-                    Toast.makeText(context, "Schedules saved successfully!", Toast.LENGTH_SHORT).show()
-            );
-
+            Log.i("ScheduleManager", "Schedules saved successfully!");
         } catch (IOException e) {
             Log.e("ScheduleManager", "Failed to save schedules.", e); // 오류 메시지와 예외를 로그로 기록
-
-            // UI 스레드에서 Toast 실행
-            new Handler(Looper.getMainLooper()).post(() ->
-                    Toast.makeText(context, "Failed to save schedules.", Toast.LENGTH_SHORT).show()
-            );
         }
     }
 
@@ -144,13 +135,7 @@ public class ScheduleManager {
             }
         } catch (IOException e) {
             Log.e("ScheduleManager", "Failed to load schedules.", e); // 오류 메시지와 예외를 로그로 기록
-
-            // UI 스레드에서 Toast 실행
-            new Handler(Looper.getMainLooper()).post(() ->
-                    Toast.makeText(context, "Failed to load schedules.", Toast.LENGTH_SHORT).show()
-            );
         }
-
         return schedules;
     }
 
@@ -177,6 +162,12 @@ public class ScheduleManager {
 
         // 확인 버튼 클릭 리스너
         confirmButton.setOnClickListener(v -> {
+            // 키보드 닫기
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            }
+
             String description = descriptionInput.getText().toString();
             String startTime = startTimeSpinner.getSelectedItem().toString();
             String endTime = endTimeSpinner.getSelectedItem().toString();
@@ -202,11 +193,17 @@ public class ScheduleManager {
         dialog.show();
     }
 
-    // 다이얼로그를 통해 일정 삭제
-    public void showDeleteScheduleDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Delete Schedule for " + selectedDate);
+    // 팝업을 통해 일정 삭제
+    public void showDeleteSchedulePopup() {
+        // 팝업용 다이얼로그 생성
+        Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.schedule_delete_dialog); // 삭제용 다이얼로그 레이아웃
 
+        Spinner scheduleSpinner = dialog.findViewById(R.id.schedule_spinner); // 스피너 연결
+        Button confirmButton = dialog.findViewById(R.id.confirm_delete_button);
+        Button cancelButton = dialog.findViewById(R.id.cancel_delete_button);
+
+        // 선택된 날짜의 일정을 가져와 스피너에 설정
         List<String> matchingSchedules = new ArrayList<>();
         for (Schedule schedule : schedules) {
             if (schedule.getDate().equals(selectedDate)) {
@@ -219,26 +216,29 @@ public class ScheduleManager {
             return;
         }
 
-        String[] scheduleArray = matchingSchedules.toArray(new String[0]);
-        builder.setItems(scheduleArray, (dialog, which) -> {
-            String selectedSchedule = scheduleArray[which];
-            schedules.removeIf(schedule -> schedule.getDate().equals(selectedDate) && schedule.getDescription().equals(selectedSchedule));
-            saveSchedulesToFile();
+        // 스피너 어댑터 설정
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, matchingSchedules);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        scheduleSpinner.setAdapter(adapter);
 
-            // 달력 업데이트
-            if (calendarAdapter != null) { // null 체크 추가
+        // 확인 버튼 클릭 리스너
+        confirmButton.setOnClickListener(v -> {
+            String selectedSchedule = (String) scheduleSpinner.getSelectedItem();
+            schedules.removeIf(schedule -> schedule.getDate().equals(selectedDate) && schedule.getDescription().equals(selectedSchedule));
+            saveSchedulesToFile(); // 변경 내용 저장
+
+            if (calendarAdapter != null) {
                 calendarAdapter.updateData(CalendarUtils.generateCalendarData(currentCalendar), currentCalendar.get(Calendar.MONTH));
-            } else {
-                Log.e("ScheduleManager", "CalendarAdapter is null, unable to update data.");
             }
 
             Toast.makeText(context, "Schedule deleted successfully!", Toast.LENGTH_SHORT).show();
+            dialog.dismiss(); // 팝업 닫기
         });
 
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+        // 취소 버튼 클릭 리스너
+        cancelButton.setOnClickListener(v -> dialog.dismiss());
 
-
-        builder.show();
+        dialog.show();
     }
 
     // 스케쥴 불러오는 메소드
@@ -257,6 +257,6 @@ public class ScheduleManager {
         button.setOnClickListener(v -> showAddSchedulePopup());
     }
     public void setDeleteScheduleButtonListener(View button) {
-        button.setOnClickListener(v -> showDeleteScheduleDialog());
+        button.setOnClickListener(v -> showDeleteSchedulePopup());
     }
 }
