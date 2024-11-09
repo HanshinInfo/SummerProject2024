@@ -72,5 +72,23 @@ public class Mascot extends Fragment {
         dislike.setText("싫어하는 것 : " + info.get(4));
         birthBackground.setText(info.get(5));
         source.setText("출처 : 새내기한신가이드 > 마스코트 소개 > " + info.get(6));
+
+        image.setAlpha(0.0f);
+        name.setAlpha(0.0f);
+        gender.setAlpha(0.0f);
+        hobby.setAlpha(0.0f);
+        specialty.setAlpha(0.0f);
+        dislike.setAlpha(0.0f);
+        birthBackground.setAlpha(0.0f);
+        source.setAlpha(0.0f);
+
+        image.animate().alpha(1.0f).setDuration(500);
+        name.animate().alpha(1.0f).setDuration(500);
+        gender.animate().alpha(1.0f).setDuration(500);
+        hobby.animate().alpha(1.0f).setDuration(500);
+        specialty.animate().alpha(1.0f).setDuration(500);
+        dislike.animate().alpha(1.0f).setDuration(500);
+        birthBackground.animate().alpha(1.0f).setDuration(500);
+        source.animate().alpha(1.0f).setDuration(500);
     }
 }

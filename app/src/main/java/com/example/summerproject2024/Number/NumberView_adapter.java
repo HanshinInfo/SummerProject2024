@@ -37,7 +37,9 @@ public class NumberView_adapter extends RecyclerView.Adapter<NumberView_adapter.
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         NumberItem ni = itemList.get(position);
         holder.aff.setText(ni.aff);
+        holder.aff.setTextSize(ni.aff.length() >= 5 ? ni.aff.length() >= 7 ? 10 : 13 : 15);
         holder.name.setText(ni.name);
+        holder.name.setTextSize(ni.name.length() >= 5 ? ni.name.length() >= 7 ? 10 : 13 : 15);
         holder.number.setText(ni.phoneNumber);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

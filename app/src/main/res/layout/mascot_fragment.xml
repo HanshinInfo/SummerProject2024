@@ -48,11 +48,12 @@
 
             <TextView
                 android:id="@+id/mascot_gender"
-                android:layout_width="wrap_content"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="30dp"
+                android:breakStrategy="simple"
                 android:text=""
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.000"
@@ -61,12 +62,12 @@
 
             <TextView
                 android:id="@+id/mascot_hobby"
-                android:layout_width="wrap_content"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="30dp"
-                android:text=""
                 android:breakStrategy="balanced"
+                android:text=""
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/mascot_gender"
@@ -74,11 +75,11 @@
 
             <TextView
                 android:id="@+id/mascot_specialty"
-                android:layout_width="wrap_content"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="30dp"
-                android:breakStrategy="simple"
+                android:breakStrategy="balanced"
                 android:text=""
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -87,12 +88,12 @@
 
             <TextView
                 android:id="@+id/mascot_dislike"
-                android:layout_width="wrap_content"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="30dp"
-                android:text=""
                 android:breakStrategy="balanced"
+                android:text=""
                 app:layout_constraintBottom_toBottomOf="@+id/mascot_image"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
