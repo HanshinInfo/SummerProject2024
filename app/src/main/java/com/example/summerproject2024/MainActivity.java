@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -28,8 +27,6 @@ import com.example.summerproject2024.Information.University_Town_Info;
 import com.example.summerproject2024.Mascot.Mascot;
 import com.example.summerproject2024.Menu.MenuAdapter;
 import com.example.summerproject2024.Menu.MenuGroup;
-import com.example.summerproject2024.Menu.MenuLinkAdapter;
-import com.example.summerproject2024.Menu.MenuLinkGroup;
 import com.example.summerproject2024.Number.University_Number;
 import com.google.android.material.navigation.NavigationView;
 
@@ -62,8 +59,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //Menu Link
     HashMap<String, String> linkMap;
+    HashMap<String, String> appMap;
     ArrayList<MenuGroup> menuGroup;
-    ArrayList<MenuLinkGroup> linkGroups;
 
     //Toolbar
     Toolbar toolbar;
@@ -116,11 +113,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         notice_link_map.put(getResources().getString(R.string.notice_scholarship_community), "https://hs.ac.kr/kor/4957/subview.do");
         notice_link_map.put(getResources().getString(R.string.notice_employment), "https://hs.ac.kr/kor/4958/subview.do");
 
+        //App
+        appMap = new HashMap<>();
+        appMap.put(getResources().getString(R.string.attend), "com.libeka.attendance.ucheckplusstud_hanshin");
+        appMap.put(getResources().getString(R.string.sugang), "kr.co.swit.hsuv");
+
+        //link
+        linkMap = new HashMap<>();
+        linkMap.put(getResources().getString(R.string.homepage), "https://hs.ac.kr/sites/kor/index.do");
+        linkMap.put(getResources().getString(R.string.lms), "https://lms.hs.ac.kr/main/MainView.dunet#main");
+        linkMap.put(getResources().getString(R.string.hsctis), "https://hsctis.hs.ac.kr/app-nexa/index.html");
+
         //Menu
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         settingMenu();
-        settingMenuLink();
 
         //Toolbar
         toolbar = findViewById(R.id.toolbar);
@@ -181,6 +188,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         item.child.add(getResources().getString(R.string.mascot_hanggu));
         menuGroup.add(item);
 
+        for(String key : appMap.keySet()){
+            item = new MenuGroup(key);
+            menuGroup.add(item);
+        }
+
+        for(String key : linkMap.keySet()){
+            item = new MenuGroup(key);
+            menuGroup.add(item);
+        }
+
         MenuAdapter adapter = new MenuAdapter(getApplicationContext(), R.layout.group_row, R.layout.child_row, menuGroup);
         menuList.setGroupIndicator(null);
         menuList.setAdapter(adapter);
@@ -214,6 +231,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     transaction.setCustomAnimations(R.anim.from_right, 0);
                     transaction.replace(R.id.fragment_container_view, university_town_info).commitAllowingStateLoss();
                     closeMenu(-1);
+                    return true;
+                }
+
+                if(appMap.containsKey(groupName)){
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    String packageName = appMap.get(groupName);
+                    Intent intent = getPackageManager().getLaunchIntentForPackage(packageName);
+                    if(intent != null){
+                        startActivity(intent);
+                    }
+                    else {
+                        Intent playStoreIntent = new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("https://play.google.com/store/apps/details?id=" + packageName));
+                        startActivity(playStoreIntent);
+                    }
+                    return true;
+                }
+
+                if(linkMap.containsKey(groupName)){
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(linkMap.get(groupName)));
+                    startActivity(intent);
                     return true;
                 }
 
@@ -281,36 +321,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 menuList.collapseGroup(i);
             }
         }
-    }
-
-    //menu-link
-    private void settingMenuLink() {
-        menuLinkList = (ListView) findViewById(R.id.menuLinkList);
-
-        linkMap = new HashMap<>();
-        linkMap.put(getResources().getString(R.string.homepage), "https://hs.ac.kr/sites/kor/index.do");
-        linkMap.put(getResources().getString(R.string.lms), "https://lms.hs.ac.kr/main/MainView.dunet#main");
-        linkMap.put(getResources().getString(R.string.hsctis), "https://hsctis.hs.ac.kr/app-nexa/index.html");
-        linkMap.put(getResources().getString(R.string.attend), "https://attend.hs.ac.kr/#");
-        linkMap.put(getResources().getString(R.string.sugang), "https://sugang.hs.ac.kr/login");
-
-        linkGroups = new ArrayList<>();
-        for(String key : linkMap.keySet()){
-            linkGroups.add(new MenuLinkGroup(key));
-        }
-
-        MenuLinkAdapter menuLinkAdapter = new MenuLinkAdapter(this, linkGroups);
-        menuLinkList.setAdapter(menuLinkAdapter);
-
-        menuLinkList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                drawerLayout.closeDrawer(GravityCompat.START);
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(linkMap.get(menuLinkAdapter.getItem(position).link)));
-                startActivity(intent);
-            }
-        });
     }
 
     @Override

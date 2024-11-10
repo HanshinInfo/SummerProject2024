@@ -1,12 +1,15 @@
 package com.example.summerproject2024.Menu;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.summerproject2024.R;
@@ -34,8 +37,17 @@ public class MenuAdapter extends BaseExpandableListAdapter {
         if(convertView == null){
             convertView = myInf.inflate(this.groupLay, parent, false);
         }
+
         TextView groupName = (TextView) convertView.findViewById(R.id.group_name);
         groupName.setText(listView.get(groupPosition).groupName);
+
+        View divider = convertView.findViewById(R.id.group_divider);
+        if(listView.get(groupPosition).groupName.equals("전자출결")){
+            divider.setVisibility(View.VISIBLE);
+        }
+        else {
+            divider.setVisibility(View.GONE);
+        }
 
         return convertView;
     }

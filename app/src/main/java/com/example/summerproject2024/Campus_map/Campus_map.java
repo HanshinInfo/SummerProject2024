@@ -80,4 +80,20 @@ public class Campus_map extends Fragment {
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        scrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                int horizontalScrollViewWidth = horizontalScrollView.getWidth();
+                int contentWidth = campus_map.getWidth();
+
+                int horizontalOffset = (contentWidth - horizontalScrollViewWidth) / 3;
+                horizontalScrollView.scrollTo(horizontalOffset, 0);
+            }
+        });
+    }
+
 }
