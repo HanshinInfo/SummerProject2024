@@ -1,16 +1,22 @@
 package com.example.summerproject2024.Number;
+import static android.content.Context.INPUT_METHOD_SERVICE;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -74,6 +80,7 @@ public class University_Number extends Fragment {
         }
     }
     private void callNumInfo(){
+        editText.setText("");
         ArrayList<String>[] num_Info = call_DB.selectCallNumbersAll();
 
         ArrayList<NumberItem> itemList = new ArrayList<>();
@@ -89,6 +96,22 @@ public class University_Number extends Fragment {
             itemList.add(new NumberItem(aff, subaff, name, phoneNumber, office));
         }
         num_adapter = new NumberView_adapter(itemList);
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    InputMethodManager manager;
+                    View currentFocus = getActivity().getCurrentFocus();
+                    if (currentFocus != null) {
+                        manager = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
+                        manager.hideSoftInputFromWindow(currentFocus.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                    }
+                    return true;
+                }
+
+                return false;
+            }
+        });
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -138,6 +161,7 @@ public class University_Number extends Fragment {
     }
 
     private void callProfessorInfo(){
+        editText.setText("");
         ArrayList<String>[] pro_Info = call_DB.selectProfessorAll();
 
         ArrayList<NumberItem> itemList = new ArrayList<>();
@@ -152,7 +176,22 @@ public class University_Number extends Fragment {
             itemList.add(new NumberItem(aff, name, phoneNumber, office));
         }
         pro_adapter = new NumberView_adapter(itemList);
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    InputMethodManager manager;
+                    View currentFocus = getActivity().getCurrentFocus();
+                    if (currentFocus != null) {
+                        manager = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
+                        manager.hideSoftInputFromWindow(currentFocus.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                    }
+                    return true;
+                }
 
+                return false;
+            }
+        });
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
