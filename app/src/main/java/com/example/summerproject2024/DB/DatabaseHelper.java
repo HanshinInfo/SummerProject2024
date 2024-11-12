@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static String dbName = "Android.db";
-    public static int version = 51;
+    public static int version = 52;
 
     public DatabaseHelper(@Nullable Context context) {
 
