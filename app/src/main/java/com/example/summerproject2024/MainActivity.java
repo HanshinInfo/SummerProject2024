@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -100,6 +101,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                     else{
                         drawerLayout.openDrawer(GravityCompat.START);
+                        InputMethodManager manager;
+                        View currentFocus = getCurrentFocus();
+                        if (currentFocus != null) {
+                            manager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                            manager.hideSoftInputFromWindow(currentFocus.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                        }
                     }
                 }
             }

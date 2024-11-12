@@ -3,20 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@drawable/border">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select Schedule to Delete"
-        android:textSize="18sp"
         android:layout_gravity="center_horizontal"
-        android:paddingBottom="8dp" />
+        android:paddingBottom="8dp"
+        style="@style/scheduleStyle"
+        android:text="Select Schedule to Delete"
+        android:textSize="18dp" />
 
     <Spinner
         android:id="@+id/schedule_spinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,16 +29,20 @@
 
         <Button
             android:id="@+id/confirm_delete_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
             android:layout_weight="1"
+            android:backgroundTint="@color/sub_bgColor"
             android:text="Delete" />
 
         <Button
             android:id="@+id/cancel_delete_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
             android:layout_weight="1"
+            android:backgroundTint="@color/sub_bgColor"
             android:text="Cancel" />
     </LinearLayout>
 </LinearLayout>
