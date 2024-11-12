@@ -99,12 +99,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         drawerLayout.closeDrawer(GravityCompat.START);
                     }
                     else{
-                        InputMethodManager manager;
-                        View currentFocus = getCurrentFocus();
-                        if (currentFocus != null) {
-                            manager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                            manager.hideSoftInputFromWindow(currentFocus.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                        }
                         drawerLayout.openDrawer(GravityCompat.START);
                         InputMethodManager manager;
                         View currentFocus = getCurrentFocus();
