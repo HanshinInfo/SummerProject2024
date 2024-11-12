@@ -73,5 +73,13 @@ public class University_Num_dialog extends Dialog{
         d_name.setText(info.name);
         d_number.setText(info.phoneNumber);
         d_office.setText(info.office);
+
+        d_number.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+info.phoneNumber));
+                University_Num_dialog.this.getContext().startActivity(intent);
+            }
+        });
     }
 }

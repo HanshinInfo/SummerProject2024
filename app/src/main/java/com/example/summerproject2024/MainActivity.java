@@ -1,6 +1,7 @@
 package com.example.summerproject2024;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -39,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //FragmentManager
     private static FragmentManager fragmentManager;
     private static FragmentTransaction transaction;
-
     //Layout
     DrawerLayout drawerLayout;
 
@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Menu
     NavigationView navigationView;
     ExpandableListView menuList;
-    ListView menuLinkList;
 
     //Menu Link
     HashMap<String, String> linkMap;
@@ -100,6 +99,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         drawerLayout.closeDrawer(GravityCompat.START);
                     }
                     else{
+                        InputMethodManager manager;
+                        View currentFocus = getCurrentFocus();
+                        if (currentFocus != null) {
+                            manager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                            manager.hideSoftInputFromWindow(currentFocus.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                        }
                         drawerLayout.openDrawer(GravityCompat.START);
                         InputMethodManager manager;
                         View currentFocus = getCurrentFocus();
@@ -195,15 +200,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         item.child.add(getResources().getString(R.string.mascot_hanggu));
         menuGroup.add(item);
 
+        item = new MenuGroup("구분선");
+        menuGroup.add(item);
+
         for(String key : appMap.keySet()){
             item = new MenuGroup(key);
             menuGroup.add(item);
         }
 
-        for(String key : linkMap.keySet()){
-            item = new MenuGroup(key);
-            menuGroup.add(item);
-        }
+        item = new MenuGroup(getResources().getString(R.string.homepage));
+        menuGroup.add(item);
+        item = new MenuGroup(getResources().getString(R.string.lms));
+        menuGroup.add(item);
+        item = new MenuGroup(getResources().getString(R.string.hsctis));
+        menuGroup.add(item);
 
         MenuAdapter adapter = new MenuAdapter(getApplicationContext(), R.layout.group_row, R.layout.child_row, menuGroup);
         menuList.setGroupIndicator(null);
@@ -242,7 +252,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
 
                 if(appMap.containsKey(groupName)){
-                    drawerLayout.closeDrawer(GravityCompat.START);
                     String packageName = appMap.get(groupName);
                     Intent intent = getPackageManager().getLaunchIntentForPackage(packageName);
                     if(intent != null){
@@ -257,7 +266,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
 
                 if(linkMap.containsKey(groupName)){
-                    drawerLayout.closeDrawer(GravityCompat.START);
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(Uri.parse(linkMap.get(groupName)));
                     startActivity(intent);

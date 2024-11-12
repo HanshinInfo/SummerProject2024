@@ -43,7 +43,7 @@ public class Calendar_fragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         // ScheduleManager 초기화
-        scheduleManager = new ScheduleManager(getContext(), adapter); // ScheduleManager 초기화
+        scheduleManager = new ScheduleManager(getContext(), adapter, currentCalendar); // ScheduleManager 초기화
         adapter.setScheduleManager(scheduleManager); // 어댑터에 scheduleManager 설정
 
         CalendarUtils.updateMonthText(currentCalendar, monthText);

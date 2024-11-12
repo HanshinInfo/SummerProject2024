@@ -34,11 +34,11 @@ public class ScheduleManager {
     private CalendarAdapter calendarAdapter;
     private final AcademicScheduleCrawler crawler;
 
-    public ScheduleManager(Context context, CalendarAdapter adapter) {
+    public ScheduleManager(Context context, CalendarAdapter adapter, Calendar currentCalendar) {
         this.context = context;
         this.selectedDate = getCurrentDate();
         this.schedules = loadSchedulesFromFile();
-        this.currentCalendar = Calendar.getInstance();
+        this.currentCalendar = currentCalendar;
         this.calendarAdapter = adapter;
         this.crawler = new AcademicScheduleCrawler();
         Log.d("ScheduleManager", "Initialized with adapter: " + (adapter != null));
@@ -178,7 +178,8 @@ public class ScheduleManager {
 
             // 달력 업데이트
             if (calendarAdapter != null) { // null 체크 추가
-                calendarAdapter.updateData(CalendarUtils.generateCalendarData(currentCalendar), currentCalendar.get(Calendar.MONTH));
+                List<Integer> daysList = CalendarUtils.generateCalendarData(currentCalendar); // 현재 보고 있는 월의 데이터
+                calendarAdapter.updateData(daysList, currentCalendar.get(Calendar.MONTH)); // 현재 월로 업데이트
             } else {
                 Log.e("ScheduleManager", "CalendarAdapter is null, unable to update data.");
             }

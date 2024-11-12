@@ -42,11 +42,15 @@ public class MenuAdapter extends BaseExpandableListAdapter {
         groupName.setText(listView.get(groupPosition).groupName);
 
         View divider = convertView.findViewById(R.id.group_divider);
-        if(listView.get(groupPosition).groupName.equals("전자출결")){
+        if(listView.get(groupPosition).groupName.equals("구분선")){
             divider.setVisibility(View.VISIBLE);
+            groupName.setVisibility(View.GONE);
+            convertView.setClickable(true);
         }
         else {
             divider.setVisibility(View.GONE);
+            groupName.setVisibility(View.VISIBLE);
+            convertView.setClickable(false);
         }
 
         return convertView;
