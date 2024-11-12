@@ -328,7 +328,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "    ('진현가든', '경기도 오산시 양산동 444-1', '음식점', '031-372-9971', 'https://www.diningcode.com/profile.php?rid=mob3TaDPX4Xe'),\n" +
                 "    ('해뜨는집', '경기도 오산시 한신대길 118', '한식당', '031-378-7825','https://map.naver.com/p/search/%ED%95%B4%EB%9C%A8%EB%8A%94%EC%A7%91%20%EC%98%A4%EC%82%B0/place/1850208189?c=15.00,0,0,0,dh&placePath=/home'),\n" +
                 "    ('몽상', '경기 오산시 양산로 354 1층 몽상', '음식점', '0508-8189-9706', 'https://map.naver.com/p/entry/place/1472232373?c=15.00,0,0,0,dh&placePath=/home'),\n" +
-                "    ('화락', '경기도 오산시 양산로 347', '일식 음식점', '050-71395-7131', 'https://www.google.com/maps/place/%ED%99%94%EB%9D%BD/@37.1961245,127.0235342,15z/data=!4m2!3m1!1s0x0:0x27d467efc13a244b?sa=X&ved=1t:2428&ictx=111'),\n" +
                 "    ('카페 리메인', '경기도 오산시 양산로 351', '카페', '031-374-1208', 'https://www.google.com/maps/place/%EC%B9%B4%ED%8E%98+%EB%A6%AC%EB%A9%94%EC%9D%B8/data=!3m2!1e3!4b1!4m6!3m5!1s0x357b41d9e3aa81cd:0xd811f34061b612e5!8m2!3d37.1960732!4d127.0237567!16s%2Fg%2F11syf91y6h?entry=ttu&g_ep=EgoyMDI0MDgyMS4wIKXMDSoASAFQAw%3D%3D'),\n" +
                 "    ('내가찜한닭', '경기 오산시 양산로 347', '음식점', '031-372-2356', 'https://map.naver.com/p/entry/place/35562793?c=15.00,0,0,0,dh&placePath=/home'),\n" +
                 "    ('양산골 주막', '경기도 오산시 양산동 한신대길 113', '술집', '031-377-7371', 'https://map.naver.com/p/entry/place/37131480?c=15.00,0,0,0,dh&placePath=/home'),\n" +
