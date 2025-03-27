@@ -1,7 +1,7 @@
 # 팀 프로젝트명 (HashinInfo)
 이 프로젝트는 [한생길]이 함께 개발한 프로젝트입니다.  
 - 개발 기간: 2024.07 - 2024.11  
-- 팀원: @DWinging, @NamJang, @mgyuhw, @rlarjsdud
+- 팀원: DWinging, NamJang, mgyuhw, rlarjsdud
 - 주요 기능: 캠퍼스 지도, 학사 일정, 전화번호부, 주변 상권 정보, 공식 사이트 접근  
 
 ## 기여 내용
